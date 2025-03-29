@@ -9,7 +9,6 @@
 - Databinding
 - Livedata
 - Toasty
-- Firbase crash report
 
 ## Fonts
 	- https://stackoverflow.com/a/27588966
