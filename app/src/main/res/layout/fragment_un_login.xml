@@ -5,10 +5,10 @@
     <data>
         <variable
             name="f"
-            type="nix.cake.android.ui.main.shop.ShopFragment" />
+            type="nix.cake.android.ui.main.login.UnLoginFragment" />
         <variable
             name="vm"
-            type="nix.cake.android.ui.main.shop.ShopViewModel" />
+            type="nix.cake.android.ui.main.login.UnLoginViewModel" />
         <import type="android.view.View"/>
     </data>
 
@@ -21,17 +21,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:queryHint="Search here..."
-                app:iconifiedByDefault="false"/>
+            <Button
+                android:layout_width="@dimen/_160sdp"
+                android:layout_height="@dimen/_45sdp"
+                android:background="@drawable/background_button_login_radius_25"
+                android:text="@string/login"
+                android:textSize="@dimen/_14ssp"
+                android:fontFamily="@font/roboto_500"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:onClick="@{v -> f.onLoginClick()}"/>
 
         </RelativeLayout>
 

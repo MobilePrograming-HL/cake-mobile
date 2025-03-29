@@ -16,4 +16,6 @@ public interface ApiService {
     Observable<ResponseWrapper<LoginResponse>> login(@Body LoginRequest request);
     @POST("v1/auth/refresh-token")
     Observable<ResponseWrapper<LoginResponse>> refreshToken(@Body String token);
+    @POST("v1/auth/logout")
+    Observable<String> logout(@Body String token);
 }

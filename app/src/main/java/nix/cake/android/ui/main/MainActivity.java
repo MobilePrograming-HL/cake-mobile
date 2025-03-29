@@ -19,6 +19,7 @@ import nix.cake.android.ui.base.activity.BaseActivity;
 import nix.cake.android.ui.main.cart.CartFragment;
 import nix.cake.android.ui.main.home.HomeFragment;
 import nix.cake.android.ui.main.login.LoginActivity;
+import nix.cake.android.ui.main.login.UnLoginFragment;
 import nix.cake.android.ui.main.profile.ProfileFragment;
 import nix.cake.android.ui.main.profile.address.ShippingAddressActivity;
 import nix.cake.android.ui.main.profile.order.MyOrdersActivity;
@@ -31,11 +32,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     private ShopFragment shopFragment;
     private CartFragment cartFragment;
     private ProfileFragment profileFragment;
+    private UnLoginFragment unLoginFragment;
     private FragmentManager fm;
     private static final String HOME = "HOME";
     private static final String SHOP = "SHOP";
     private static final String CART = "CART";
     private static final String PROFILE = "PROFILE";
+    private static final String UNLOGIN = "UNLOGIN";
+
+    private Integer currentFragment = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +56,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         fm.beginTransaction().add(R.id.nav_host_fragment,homeFragment,HOME).commitNow();
 
         viewBinding.bottomNav.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
+            currentFragment = item.getItemId();
+            switch (currentFragment) {
                 case R.id.home:
                     if (homeFragment == null){
                         homeFragment = new HomeFragment();
@@ -71,14 +77,25 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     active = shopFragment;
                     return true;
                 case R.id.cart:
-                    if (cartFragment == null){
-                        cartFragment = new CartFragment();
-                        fm.beginTransaction().add(R.id.nav_host_fragment, cartFragment, CART).hide(active).commit();
+                    if (isLogin()) {
+                        if (cartFragment == null){
+                            cartFragment = new CartFragment();
+                            fm.beginTransaction().add(R.id.nav_host_fragment, cartFragment, CART).hide(active).commit();
+                        } else {
+                            fm.beginTransaction().hide(active).show(cartFragment).commit();
+                        }
+                        active = cartFragment;
+                        return true;
                     } else {
-                        fm.beginTransaction().hide(active).show(cartFragment).commit();
+                        if (unLoginFragment == null) {
+                            unLoginFragment = new UnLoginFragment();
+                            fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
+                        } else {
+                            fm.beginTransaction().hide(active).show(unLoginFragment).commit();
+                        }
+                        active = unLoginFragment;
+                        return true;
                     }
-                    active = cartFragment;
-                    return true;
                 case R.id.profile:
                     if (isLogin()) {
                         if (profileFragment == null) {
@@ -87,11 +104,18 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         } else {
                             fm.beginTransaction().hide(active).show(profileFragment).commit();
                         }
+                        active = profileFragment;
+                        return true;
                     } else {
-                        viewModel.showLoading();
-                        navigateToLogin();
+                        if (unLoginFragment == null) {
+                            unLoginFragment = new UnLoginFragment();
+                            fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
+                        } else {
+                            fm.beginTransaction().hide(active).show(unLoginFragment).commit();
+                        }
+                        active = unLoginFragment;
+                        return true;
                     }
-                    return true;
                 default:
                     break;
             }
@@ -102,8 +126,43 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.hideLoading();
+        navigateToCurrentFragment();
+    }
 
+    public void navigateToCurrentFragment() {
+        switch (currentFragment) {
+            case R.id.cart:
+                if (cartFragment == null){
+                    cartFragment = new CartFragment();
+                    fm.beginTransaction().add(R.id.nav_host_fragment, cartFragment, CART).hide(active).commit();
+                } else {
+                    fm.beginTransaction().hide(active).show(cartFragment).commit();
+                }
+                active = cartFragment;
+                break;
+            case R.id.profile:
+                if (isLogin()) {
+                    if (profileFragment == null) {
+                        profileFragment = new ProfileFragment();
+                        fm.beginTransaction().add(R.id.nav_host_fragment, profileFragment, PROFILE).hide(active).commit();
+                    } else {
+                        fm.beginTransaction().hide(active).show(profileFragment).commit();
+                    }
+                    active = profileFragment;
+                    break;
+                } else {
+                    if (unLoginFragment == null) {
+                        unLoginFragment = new UnLoginFragment();
+                        fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
+                    } else {
+                        fm.beginTransaction().hide(active).show(unLoginFragment).commit();
+                    }
+                    active = unLoginFragment;
+                    break;
+                }
+            default:
+                break;
+        }
     }
     @Override
     public int getLayoutId() {
@@ -136,5 +195,35 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     public void navigateToLogin() {
         Intent it = new Intent(this, LoginActivity.class);
         startActivity(it);
+    }
+    public void logout() {
+//        viewModel.logout(new MainCalback<String>() {
+//            @Override
+//            public void doError(Throwable error) {
+//
+//            }
+//
+//            @Override
+//            public void doSuccess() {
+//
+//            }
+//
+//            @Override
+//            public void doFail() {
+//
+//            }
+//
+//            @Override
+//            public void doSuccess(String object) {
+//                navigateToLogin();
+//            }
+//        });
+        viewModel.showLoading();
+        viewModel.getRepository().getSharedPreferences().setToken("");
+        navigateToLogin();
+    }
+    public void login() {
+        viewModel.showLoading();
+        navigateToLogin();
     }
 }

@@ -1,5 +1,7 @@
 package nix.cake.android.ui.main;
 
+import android.content.Intent;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableSource;
@@ -11,6 +13,7 @@ import nix.cake.android.data.model.api.ResponseWrapper;
 import nix.cake.android.data.model.api.request.login.LoginRequest;
 import nix.cake.android.data.model.api.response.login.LoginResponse;
 import nix.cake.android.ui.base.activity.BaseViewModel;
+import nix.cake.android.ui.main.login.LoginActivity;
 import nix.cake.android.utils.NetworkUtils;
 import retrofit2.HttpException;
 import timber.log.Timber;
@@ -55,7 +58,6 @@ public class MainViewModel extends BaseViewModel {
                             }
                         }));
     }
-
     public void doRefreshToken() {
         showLoading();
         compositeDisposable.add(repository.getApiService().refreshToken(repository.getSharedPreferences().getToken())
@@ -89,5 +91,27 @@ public class MainViewModel extends BaseViewModel {
                             }
                         }));
 
+    }
+    public void logout(MainCalback<String> callback) {
+        showLoading();
+        compositeDisposable.add(repository.getApiService().logout(repository.getSharedPreferences().getToken())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            repository.getSharedPreferences().setToken("");
+                            callback.doSuccess(response);
+                        }, throwable -> {
+                            hideLoading();
+                            Timber.e(throwable);
+                            if (throwable instanceof HttpException && ((HttpException) throwable).code() == 400) {
+                                HttpException httpException = (HttpException) throwable;
+                                if (httpException.code() == 400) {
+                                }
+                                showErrorMessage("Logout failed");
+                            } else {
+                                showErrorMessage("Logout failed");
+                            }
+                        }));
     }
 }

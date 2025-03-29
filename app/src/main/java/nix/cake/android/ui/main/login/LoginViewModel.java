@@ -34,10 +34,8 @@ public class LoginViewModel extends BaseViewModel {
                 )
                 .subscribe(
                         response -> {
-                            hideLoading();
                             repository.getSharedPreferences().setToken(response.getData().getToken());
                             application.getCurrentActivity().finish();
-                            showSuccessMessage("Login success");
                         }, throwable -> {
                             hideLoading();
                             Timber.e(throwable);
