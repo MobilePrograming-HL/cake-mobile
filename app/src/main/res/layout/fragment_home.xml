@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="f"
+            type="nix.cake.android.ui.main.home.HomeFragment" />
+        <variable
+            name="vm"
+            type="nix.cake.android.ui.main.home.HomeViewModel" />
+        <import type="android.view.View"/>
+    </data>
+
+    <FrameLayout
+        android:animateLayoutChanges="true"
+        android:background="@color/bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/l_sale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp">
+
+                    <TextView
+                        android:id="@+id/title_sale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sale"
+                        android:textSize="@dimen/_24ssp"
+                        android:textColor="@color/text"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/roboto_500"
+                        android:layout_marginVertical="@dimen/_20sdp" />
+
+                    <TextView
+                        android:id="@+id/view_all_sale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_all"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/text"
+                        android:fontFamily="@font/roboto_500"
+                        android:layout_marginVertical="@dimen/_30sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/_12sdp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_sale"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/title_sale"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/l_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp">
+
+                    <TextView
+                        android:id="@+id/title_new"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/new_product"
+                        android:textSize="@dimen/_24ssp"
+                        android:textColor="@color/text"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/roboto_500"
+                        android:layout_marginVertical="@dimen/_20sdp" />
+
+                    <TextView
+                        android:id="@+id/view_all_new"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_all"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/text"
+                        android:fontFamily="@font/roboto_500"
+                        android:layout_marginVertical="@dimen/_30sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/_12sdp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_new"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/title_new"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/l_popular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp">
+
+                    <TextView
+                        android:id="@+id/title_popular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/popular"
+                        android:textSize="@dimen/_24ssp"
+                        android:textColor="@color/text"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/roboto_500"
+                        android:layout_marginVertical="@dimen/_20sdp" />
+
+                    <TextView
+                        android:id="@+id/view_all_popular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_all"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/text"
+                        android:fontFamily="@font/roboto_500"
+                        android:layout_marginVertical="@dimen/_30sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/_12sdp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_popular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/title_popular"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+</layout>

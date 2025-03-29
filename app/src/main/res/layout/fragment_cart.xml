@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="f"
+            type="nix.cake.android.ui.main.cart.CartFragment" />
+        <variable
+            name="vm"
+            type="nix.cake.android.ui.main.cart.CartViewModel" />
+        <import type="android.view.View"/>
+    </data>
+
+    <FrameLayout
+        android:animateLayoutChanges="true"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/my_cart"
+                android:textSize="@dimen/_30ssp"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:fontFamily="@font/roboto_600"
+                android:textColor="@color/text"/>
+
+            <LinearLayout
+                android:id="@+id/countItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_below="@+id/title"
+                android:orientation="horizontal"
+                android:onClick="@{v -> f.onAllClick()}">
+
+                <ImageView
+                    android:id="@+id/checked"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/unchecked"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_margin="@dimen/_8sdp"/>
+
+                <TextView
+                    android:id="@+id/choose_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_all"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/text_second"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_600"/>
+
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_marginVertical="@dimen/_9sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_height="1dp"
+                android:background="@color/text_second"
+                android:layout_below="@+id/countItem"/>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:scrollbars="none"
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/line1"
+                android:layout_above="@+id/layoutCheckOut">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+            <RelativeLayout
+                android:id="@+id/layoutCheckOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+                <View
+                    android:id="@+id/line2"
+                    android:layout_width="match_parent"
+                    android:layout_marginVertical="@dimen/_9sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_height="1dp"
+                    android:background="@color/text_second"
+                    android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/line2"
+                    android:text="@string/total_amount"
+                    android:textColor="@color/text_second"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:fontFamily="@font/roboto_600"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/line2"
+                    android:text="@string/_123"
+                    android:textColor="@color/text"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:fontFamily="@font/roboto_600"
+                    android:textStyle="bold"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:background="@drawable/background_button_login_radius_25"
+                    android:text="@string/check_out"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15ssp"
+                    android:fontFamily="@font/roboto_500"
+                    android:layout_marginHorizontal="@dimen/_24sdp"
+                    android:layout_marginVertical="@dimen/_14sdp"
+                    android:layout_below="@id/total"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </FrameLayout>
+</layout>
