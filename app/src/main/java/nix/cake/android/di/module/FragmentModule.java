@@ -17,8 +17,8 @@ import dagger.Module;
 import dagger.Provides;
 import nix.cake.android.ui.main.cart.CartViewModel;
 import nix.cake.android.ui.main.home.HomeViewModel;
+import nix.cake.android.ui.main.login.UnLoginViewModel;
 import nix.cake.android.ui.main.profile.ProfileViewModel;
-import nix.cake.android.ui.main.profile.address.ShippingAddressViewModel;
 import nix.cake.android.ui.main.shop.ShopViewModel;
 
 @Module
@@ -67,5 +67,12 @@ public class FragmentModule {
         Supplier<ProfileViewModel> supplier = () -> new ProfileViewModel(repository, (MVVMApplication)application);
         ViewModelProviderFactory<ProfileViewModel> factory = new ViewModelProviderFactory<>(ProfileViewModel.class, supplier);
         return new ViewModelProvider(fragment, factory).get(ProfileViewModel.class);
+    }
+    @Provides
+    @FragmentScope
+    UnLoginViewModel provideUnLoginViewModel(Repository repository, Context application) {
+        Supplier<UnLoginViewModel> supplier = () -> new UnLoginViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<UnLoginViewModel> factory = new ViewModelProviderFactory<>(UnLoginViewModel.class, supplier);
+        return new ViewModelProvider(fragment, factory).get(UnLoginViewModel.class);
     }
 }

@@ -108,6 +108,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
     @Override
     protected void onResume() {
         super.onResume();
+        viewModel.hideLoading();
         LocalBroadcastManager.getInstance(this).registerReceiver(globalApplicationReceiver, filterGlobalApplication);
         updateCurrentAcitivity();
     }

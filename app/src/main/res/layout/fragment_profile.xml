@@ -83,191 +83,210 @@
                 </LinearLayout>
                 
             </RelativeLayout>
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/l_avatar"
-                android:orientation="vertical"
-                android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_30sdp">
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_65sdp"
-                    android:onClick="@{v -> f.onMyOrdersClick()}">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerVertical="true">
-                        <TextView
-                            android:id="@+id/order"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
+                    >
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_65sdp"
+                        android:onClick="@{v -> f.onMyOrdersClick()}">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/my_orders"
-                            android:textSize="@dimen/_16ssp"
-                            android:textColor="@color/text"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/roboto_500"/>
+                            android:orientation="vertical"
+                            android:layout_centerVertical="true">
+                            <TextView
+                                android:id="@+id/order"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/my_orders"
+                                android:textSize="@dimen/_16ssp"
+                                android:textColor="@color/text"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/roboto_500"/>
 
-                        <TextView
-                            android:id="@+id/order_count"
+                            <TextView
+                                android:id="@+id/order_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email"
+                                android:textSize="@dimen/_13ssp"
+                                android:textColor="@color/text_second"
+                                android:fontFamily="@font/roboto_500"/>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/chevron_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_65sdp"
+                        android:onClick="@{v -> f.onShippingAddressClick()}">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/email"
-                            android:textSize="@dimen/_13ssp"
-                            android:textColor="@color/text_second"
-                            android:fontFamily="@font/roboto_500"/>
-                    </LinearLayout>
+                            android:orientation="vertical"
+                            android:layout_centerVertical="true">
+                            <TextView
+                                android:id="@+id/ship_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/shipping_addresses"
+                                android:textSize="@dimen/_16ssp"
+                                android:textColor="@color/text"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/roboto_500"/>
 
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/chevron_right"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
+                            <TextView
+                                android:id="@+id/ship_address_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email"
+                                android:textSize="@dimen/_13ssp"
+                                android:textColor="@color/text_second"
+                                android:fontFamily="@font/roboto_500"/>
+                        </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_65sdp"
-                    android:onClick="@{v -> f.onShippingAddressClick()}">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerVertical="true">
-                        <TextView
-                            android:id="@+id/ship_address"
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/chevron_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_65sdp">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/shipping_addresses"
-                            android:textSize="@dimen/_16ssp"
-                            android:textColor="@color/text"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/roboto_500"/>
+                            android:orientation="vertical"
+                            android:layout_centerVertical="true">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/payment_method"
+                                android:textSize="@dimen/_16ssp"
+                                android:textColor="@color/text"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/roboto_500"/>
 
-                        <TextView
-                            android:id="@+id/ship_address_count"
+                            <TextView
+                                android:id="@+id/payment_method_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email"
+                                android:textSize="@dimen/_13ssp"
+                                android:textColor="@color/text_second"
+                                android:fontFamily="@font/roboto_500"/>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/chevron_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_65sdp">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/email"
-                            android:textSize="@dimen/_13ssp"
-                            android:textColor="@color/text_second"
-                            android:fontFamily="@font/roboto_500"/>
-                    </LinearLayout>
+                            android:orientation="vertical"
+                            android:layout_centerVertical="true">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/coupon_code"
+                                android:textSize="@dimen/_16ssp"
+                                android:textColor="@color/text"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/roboto_500"/>
 
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/chevron_right"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
+                            <TextView
+                                android:id="@+id/coupon_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email"
+                                android:textSize="@dimen/_13ssp"
+                                android:textColor="@color/text_second"
+                                android:fontFamily="@font/roboto_500"/>
+                        </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_65sdp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerVertical="true">
-                        <TextView
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/chevron_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_65sdp">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/payment_method"
-                            android:textSize="@dimen/_16ssp"
-                            android:textColor="@color/text"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/roboto_500"/>
+                            android:orientation="vertical"
+                            android:layout_centerVertical="true">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings"
+                                android:textSize="@dimen/_16ssp"
+                                android:textColor="@color/text"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/roboto_500"/>
 
-                        <TextView
-                            android:id="@+id/payment_method_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/email"
-                            android:textSize="@dimen/_13ssp"
-                            android:textColor="@color/text_second"
-                            android:fontFamily="@font/roboto_500"/>
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/name_password"
+                                android:textSize="@dimen/_13ssp"
+                                android:textColor="@color/text_second"
+                                android:fontFamily="@font/roboto_500"/>
+                        </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/chevron_right"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/chevron_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_65sdp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerVertical="true">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/coupon_code"
-                            android:textSize="@dimen/_16ssp"
-                            android:textColor="@color/text"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/roboto_500"/>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_45sdp"
+                        android:background="@drawable/background_button_cancel_order"
+                        android:text="@string/sign_out"
+                        android:textSize="@dimen/_14ssp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textWarning"
+                        android:fontFamily="@font/roboto_500"
+                        android:layout_marginVertical="@dimen/_45sdp"
+                        android:layout_marginHorizontal="@dimen/_45sdp"
+                        android:onClick="@{v -> f.onSignOutClick()}"/>
 
-                        <TextView
-                            android:id="@+id/coupon_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/email"
-                            android:textSize="@dimen/_13ssp"
-                            android:textColor="@color/text_second"
-                            android:fontFamily="@font/roboto_500"/>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/chevron_right"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_65sdp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerVertical="true">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings"
-                            android:textSize="@dimen/_16ssp"
-                            android:textColor="@color/text"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/roboto_500"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/name_password"
-                            android:textSize="@dimen/_13ssp"
-                            android:textColor="@color/text_second"
-                            android:fontFamily="@font/roboto_500"/>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/chevron_right"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-            </LinearLayout>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
         </RelativeLayout>
     </FrameLayout>
 </layout>

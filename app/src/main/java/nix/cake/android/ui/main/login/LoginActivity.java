@@ -82,7 +82,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         String password = viewBinding.password.getText().toString().trim();
 
         if (!viewModel.isEmpty(username) && !viewModel.isEmpty(password)) {
-            Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
             setNullMgs();
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setUsername(username);
