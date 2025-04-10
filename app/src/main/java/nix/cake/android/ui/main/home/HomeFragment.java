@@ -1,5 +1,7 @@
 package nix.cake.android.ui.main.home;
 
+import android.content.Intent;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import nix.cake.android.databinding.FragmentHomeBinding;
 import nix.cake.android.di.component.FragmentComponent;
 import nix.cake.android.ui.base.fragment.BaseFragment;
 import nix.cake.android.ui.main.product.adapter.ProductItemAdapter;
+import nix.cake.android.ui.main.product.detail.ProductDetailActivity;
 
 public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewModel> implements ProductItemAdapter.OnItemClickListener {
 
@@ -60,7 +63,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
     }
 
     @Override
-    public void onItemClick(OrderResponse order) {
-
+    public void onItemClick(ProductResponse product) {
+         Intent it = new Intent(getContext(), ProductDetailActivity.class);
+         startActivity(it);
     }
 }

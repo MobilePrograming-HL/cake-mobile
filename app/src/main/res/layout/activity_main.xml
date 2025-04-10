@@ -40,7 +40,8 @@
                 app:itemIconTint="@color/icon_nav_un_select"
                 app:itemTextColor="@color/icon_nav_un_select"
                 app:labelVisibilityMode="labeled"
-                android:elevation="8dp"/>
+                android:elevation="8dp"
+                android:visibility="@{vm.isShowBottomNav ? View.VISIBLE : View.GONE}"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

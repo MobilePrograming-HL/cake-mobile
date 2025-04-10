@@ -78,6 +78,18 @@
     <string name="popular">Popular</string>
     <string name="username">Username</string>
     <string name="sign_out">Sign Out</string>
-
-
+    <string name="categories">Categories</string>
+    <string name="sort_by">Sort by</string>
+    <string name="newest">Newest</string>
+    <string name="customer_review">Customer Review</string>
+    <string name="price_lowest_to_highest">Price: lowest to highest</string>
+    <string name="price_highest_to_lowest">Price: highest to lowest</string>
+    <string name="sold">Sold</string>
+    <string name="description">Description</string>
+    <string name="ratings">ratings</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="mgs_otp">We have sent the verification code to your email</string>
+    <string name="error_empty_otp">Please fill in all OTP fields.</string>
+    <string name="search">Search</string>
+    <string name="may_be">May be you like</string>
 </resources>

@@ -1,14 +1,21 @@
 package nix.cake.android.ui.main.product.adapter;
 
+import static nix.cake.android.utils.DisplayUtils.convertDoubleTwoDecimalsHasCurrency;
+
+import android.graphics.Paint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import nix.cake.android.R;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import nix.cake.android.databinding.ItemProductBinding;
@@ -20,7 +27,7 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemAdapter.
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(OrderResponse order);
+        void onItemClick(ProductResponse product);
     }
     public ProductItemAdapter() {
         this.data = new ArrayList<>();
@@ -46,7 +53,41 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemAdapter.
     @Override
     public void onBindViewHolder(@NonNull ProductItemViewHolder holder, int position) {
         ProductResponse product = data.get(position);
+
+        holder.binding.category.setText(product.getCategory().getName());
+        holder.binding.name.setText(product.getName());
+
+        Glide.with(holder.itemView.getContext())
+                .load(product.getImage())
+                .placeholder(R.drawable.cake_default)
+                .error(R.drawable.cake_default)
+                .into(holder.binding.img);
+
+        if (product.getDiscount() == null) {
+            holder.binding.percentSale.setVisibility(View.GONE);
+            holder.binding.priceAfterSale.setVisibility(View.GONE);
+
+            holder.binding.price.setText(convertDoubleTwoDecimalsHasCurrency(product.getPrice()));
+        } else {
+            holder.binding.percentSale.setVisibility(View.VISIBLE);
+            holder.binding.priceAfterSale.setVisibility(View.VISIBLE);
+
+            holder.binding.percentSale.setText(String.format("-%d%%", product.getDiscount().getDiscountPercentage()));
+            holder.binding.price.setText(convertDoubleTwoDecimalsHasCurrency(product.getPrice()));
+            holder.binding.price.setPaintFlags(holder.binding.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+            double discountedPrice = product.getPrice() * (1 - product.getDiscount().getDiscountPercentage() / 100.0);
+            holder.binding.priceAfterSale.setText(convertDoubleTwoDecimalsHasCurrency(discountedPrice));
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(product);
+            }
+        });
     }
+
+
 
     @Override
     public int getItemCount() {

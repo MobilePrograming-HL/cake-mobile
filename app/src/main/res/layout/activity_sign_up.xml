@@ -18,6 +18,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/l_header"
             android:layout_marginTop="@dimen/_18sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,26 +46,27 @@
                 android:textColor="@color/text"/>
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_centerInParent="true"
             android:orientation="vertical"
+            android:layout_below="@+id/l_header"
             android:layout_marginTop="@dimen/_50sdp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name"
+                android:text="@string/username"
                 android:textSize="@dimen/_13ssp"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:fontFamily="@font/roboto_500"
                 android:textColor="@color/text"/>
 
             <EditText
-                android:id="@+id/name"
+                android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
                 android:background="@drawable/background_text_box_radius_4"
@@ -75,7 +77,8 @@
                 android:hint="@string/enterHere"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:imeOptions="actionDone"/>
+                android:imeOptions="actionDone"
+                android:layout_marginBottom="@dimen/_12sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"

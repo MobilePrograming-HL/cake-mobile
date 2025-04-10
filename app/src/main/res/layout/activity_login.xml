@@ -18,6 +18,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/l_header"
             android:layout_marginTop="@dimen/_18sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,8 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_centerInParent="true"
             android:orientation="vertical"
+            android:layout_below="@+id/l_header"
             android:layout_marginTop="@dimen/_50sdp">
 
             <TextView
@@ -134,7 +135,8 @@
                 android:textStyle="bold"
                 android:textColor="@color/text"
                 android:layout_marginBottom="@dimen/_14sdp"
-                android:layout_gravity="end"/>
+                android:layout_gravity="end"
+                android:onClick="@{() -> a.onForgotClick()}"/>
 
             <TextView
                 android:id="@+id/errorMgs"

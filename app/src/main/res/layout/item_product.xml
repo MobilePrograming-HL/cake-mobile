@@ -25,6 +25,7 @@
 
 
                 <ImageView
+                    android:id="@+id/img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/cake_default"/>
@@ -119,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="đ 199.000"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_8ssp"
                 android:textColor="@color/text_second"/>
 
             <TextView
