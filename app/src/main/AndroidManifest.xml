@@ -49,8 +49,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAbgWMc4w9mE1C5nEVpLaM6ZUgV7qyvV0s" />
         <activity android:name="nix.cake.android.ui.main.MainActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustNothing">
+
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTop" >
             <intent-filter>
                 <!--Config app launcher-->
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -63,9 +64,11 @@
         <activity android:name="nix.cake.android.ui.main.profile.order.MyOrdersActivity"/>
         <activity android:name="nix.cake.android.ui.main.profile.order.detail.OrderDetailActivity"/>
         <activity android:name="nix.cake.android.ui.main.profile.address.ShippingAddressActivity"/>
-        <activity android:name="nix.cake.android.ui.main.profile.address.detail.AddressDetailActivity"/>
+        <activity android:name="nix.cake.android.ui.main.profile.address.detail.AddressDetailActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name="nix.cake.android.ui.main.product.filter.FilterProductActivity"/>
-        <activity android:name="nix.cake.android.ui.main.product.detail.ProductDetailActivity"/>
+        <activity android:name="nix.cake.android.ui.main.product.detail.ProductDetailActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name="nix.cake.android.ui.main.login.VerifyOtpActivity"/>
         <activity android:name="nix.cake.android.ui.main.product.find.FindProductActivity"/>
         <provider

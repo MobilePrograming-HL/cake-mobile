@@ -8,7 +8,11 @@ import dagger.Component;
 import nix.cake.android.ui.main.cart.CartFragment;
 import nix.cake.android.ui.main.home.HomeFragment;
 import nix.cake.android.ui.main.login.UnLoginFragment;
+import nix.cake.android.ui.main.product.find.FindProductFragment;
 import nix.cake.android.ui.main.profile.ProfileFragment;
+import nix.cake.android.ui.main.profile.address.detail.fragment.CommuneFragment;
+import nix.cake.android.ui.main.profile.address.detail.fragment.DistrictFragment;
+import nix.cake.android.ui.main.profile.address.detail.fragment.ProvinceFragment;
 import nix.cake.android.ui.main.shop.ShopFragment;
 
 @FragmentScope
@@ -19,4 +23,8 @@ public interface FragmentComponent {
     void inject(ShopFragment fragment);
     void inject(ProfileFragment fragment);
     void inject(UnLoginFragment fragment);
+    void inject(FindProductFragment fragment);
+    void inject(ProvinceFragment fragment);
+    void inject(DistrictFragment fragment);
+    void inject(CommuneFragment fragment);
 }

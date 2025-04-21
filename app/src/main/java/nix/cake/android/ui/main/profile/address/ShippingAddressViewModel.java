@@ -3,30 +3,74 @@ package nix.cake.android.ui.main.profile.address;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import nix.cake.android.MVVMApplication;
 import nix.cake.android.data.Repository;
+import nix.cake.android.data.model.api.ResponseListObj;
+import nix.cake.android.data.model.api.request.profile.AddressRequest;
 import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
 import nix.cake.android.ui.base.activity.BaseViewModel;
+import nix.cake.android.ui.main.MainCalback;
+import timber.log.Timber;
 
 public class ShippingAddressViewModel extends BaseViewModel {
-
-    List<AddressResponse> addressList;
     public ShippingAddressViewModel(Repository repository, MVVMApplication application) {
         super(repository, application);
-        addressList = createDummyAddresses();
     }
-    private List<AddressResponse> createDummyAddresses() {
-        List<AddressResponse> addresses = new ArrayList<>();
+    public void getListAddresses(MainCalback<ResponseListObj<AddressResponse>> callback, Integer page) {
+        compositeDisposable.add(repository.getApiService().getListAddress(page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
+    public void setAddressDefault(String id) {
+        compositeDisposable.add(repository.getApiService().setDefaultAddress(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                        }, Timber::e));
+    }
 
-        for (int i = 1; i <= 10; i++) {
-            AddressResponse address = new AddressResponse();
-            address.setId((long) i);
-            address.setName("Name " + i);
-            address.setAddress("Address " + i + ", City, Country");
-            address.setPhone("+1 555-000" + i);
-            addresses.add(address);
-        }
+    public void deleteAddress(String id) {
+        compositeDisposable.add(repository.getApiService().deleteAddress(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                        }, Timber::e));
+    }
 
-        return addresses;
+    public void getAddressDetail(MainCalback<AddressResponse> callback, String id) {
+        showLoading();
+        compositeDisposable.add(repository.getApiService().getAddressDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
     }
 }

@@ -1,5 +1,6 @@
 package nix.cake.android.ui.base.activity;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -8,7 +9,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -103,6 +107,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 }
             }
         };
+        setupEditorActionListenerForAllEditTexts(viewBinding.getRoot());
     }
 
     @Override
@@ -134,7 +139,32 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
             requestPermissions(permissions, requestCode);
         }
     }
+    private void setupEditorActionListenerForAllEditTexts(View view) {
+        if (view instanceof EditText) {
+            EditText editText = (EditText) view;
+            editText.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                        actionId == EditorInfo.IME_ACTION_GO ||
+                        actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        actionId == EditorInfo.IME_ACTION_SEND ||
+                        (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                                event.getAction() == KeyEvent.ACTION_DOWN)) {
 
+                    hideKeyboard();
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                setupEditorActionListenerForAllEditTexts(child);
+            }
+        }
+    }
     public void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -143,10 +173,12 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         }
+        clearFocusFromAllEditTexts(viewBinding.getRoot());
     }
 
 
-    private void setupHideKeyboardOnTouch() {
+    @SuppressLint("ClickableViewAccessibility")
+    public void setupHideKeyboardOnTouch() {
         // Find root layout of the activity
         View rootView = findViewById(android.R.id.content);
 
@@ -166,6 +198,18 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
         });
     }
 
+    public void clearFocusFromAllEditTexts(View view) {
+        if (view instanceof EditText) {
+            view.clearFocus();
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                clearFocusFromAllEditTexts(child);
+            }
+        }
+    }
 
     private void performDataBinding() {
         viewBinding = DataBindingUtil.setContentView(this, getLayoutId());
@@ -236,6 +280,8 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        clearFocusFromAllEditTexts(viewBinding.getRoot());
+
     }
     public boolean isLogin() {
         return viewModel.getRepository().getToken() != null && !Objects.equals(viewModel.getRepository().getToken(), "") && !Objects.equals(viewModel.getRepository().getToken(), "NULL");

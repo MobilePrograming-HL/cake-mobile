@@ -49,4 +49,16 @@ public class DisplayUtils {
     public static String convertDoubleTwoDecimalsHasCurrency(Double value) {
         return String.format("đ %,d", value.longValue());
     }
+    public static String formatLongToShortString(long value) {
+        if (value < 1000) {
+            return String.valueOf(value);
+        } else if (value < 1000000) {
+            return String.format("%dk", value / 1000);
+        } else if (value < 1000000000) {
+            return String.format("%dm", value / 1000000);
+        } else {
+            return String.format("%db", value / 1000000000);
+        }
+    }
+
 }

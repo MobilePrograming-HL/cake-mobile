@@ -3,8 +3,12 @@ package nix.cake.android.data.model.api.response.profile.address;
 import lombok.Data;
 @Data
 public class AddressResponse {
-    private Long id;
-    private String name;
-    private String address;
-    private String phone;
+    private String id;
+    private NationResponse province;
+    private NationResponse district;
+    private NationResponse commune;
+    private String details;
+    private String fullName;
+    private String phoneNumber;
+    private String isDefault;
 }

@@ -25,8 +25,7 @@
                 android:id="@+id/l_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:layout_marginBottom="@dimen/_12sdp">
+                android:background="@color/white">
                 <ImageView
                     android:layout_width="@dimen/_35sdp"
                     android:layout_height="@dimen/_35sdp"
@@ -40,19 +39,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/shipping_addresses"
+                    android:text="@string/my_addresses"
                     android:textSize="@dimen/_14ssp"
                     android:textStyle="bold"
                     android:textColor="@color/text"
                     android:fontFamily="@font/roboto_500"/>
             </RelativeLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_address"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/bg"
                 android:layout_below="@+id/l_header"
-                android:layout_marginHorizontal="@dimen/_12sdp"/>
+                >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"/>
+                <include
+                    android:id="@+id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    layout="@layout/layout_empty"
+                    android:visibility="invisible"/>
+            </FrameLayout>
+
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
@@ -65,7 +78,8 @@
                 android:src="@drawable/fab_add"
                 app:fabSize="normal"
                 app:maxImageSize="@dimen/_30sdp"
-                app:backgroundTint="@color/black" />
+                app:backgroundTint="@color/black"
+                android:onClick="@{v -> a.onCreateAddressClick()}"/>
         </RelativeLayout>
     </FrameLayout>
 </layout>

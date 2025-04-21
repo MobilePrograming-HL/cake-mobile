@@ -2,6 +2,7 @@ package nix.cake.android.ui.main.profile;
 
 import eu.davidea.flexibleadapter.databinding.BR;
 import nix.cake.android.R;
+import nix.cake.android.constant.Constants;
 import nix.cake.android.databinding.FragmentProfileBinding;
 import nix.cake.android.di.component.FragmentComponent;
 import nix.cake.android.ui.base.fragment.BaseFragment;
@@ -18,7 +19,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
         ((MainActivity) requireActivity()).getMyOrders();
     }
     public void onShippingAddressClick() {
-        ((MainActivity) requireActivity()).getShippingAddress();
+        ((MainActivity) requireActivity()).getListAddress(Constants.PAGE_START);
     }
     public void onSignOutClick() {
         ((MainActivity) requireActivity()).logout();

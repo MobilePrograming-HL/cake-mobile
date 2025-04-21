@@ -10,9 +10,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import nix.cake.android.MVVMApplication;
 import nix.cake.android.data.Repository;
 import nix.cake.android.data.model.api.ResponseListObj;
+import nix.cake.android.data.model.api.request.cart.UpdateCartItemRequest;
 import nix.cake.android.data.model.api.request.login.LoginRequest;
+import nix.cake.android.data.model.api.request.profile.AddressRequest;
+import nix.cake.android.data.model.api.response.cart.CartResponse;
 import nix.cake.android.data.model.api.response.product.CategoryResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
+import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
 import nix.cake.android.ui.base.activity.BaseViewModel;
 import nix.cake.android.utils.NetworkUtils;
 import retrofit2.HttpException;
@@ -121,7 +125,6 @@ public class MainViewModel extends BaseViewModel {
                         }));
     }
     public void getListCategories(MainCalback<ResponseListObj<CategoryResponse>> callback){
-        showLoading();
         compositeDisposable.add(repository.getApiService().getListCategory()
                 .subscribeOn(Schedulers.io())
                 .subscribe(
@@ -129,7 +132,6 @@ public class MainViewModel extends BaseViewModel {
                             if (response.isResult()) {
                                 callback.doSuccess(response.getData());
                             } else {
-                                application.getCurrentActivity().runOnUiThread(this::hideLoading);
                                 callback.doFail();
                             }
 
@@ -141,24 +143,90 @@ public class MainViewModel extends BaseViewModel {
         );
     }
 
-    public void getListProducts(MainCalback<ResponseListObj<ProductResponse>> callback, String categoryId){
-        showLoading();
-        compositeDisposable.add(repository.getApiService().getListProduct(categoryId)
+    public void getListProducts(MainCalback<ResponseListObj<ProductResponse>> callback, String categoryId, Integer page) {
+        compositeDisposable.add(repository.getApiService().getListProduct(categoryId, page)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         response -> {
                             if (response.isResult()) {
                                 callback.doSuccess(response.getData());
                             } else {
-                                application.getCurrentActivity().runOnUiThread(this::hideLoading);
+                                hideLoading();
                                 callback.doFail();
                             }
-
                         }, throwable -> {
                             Timber.e(throwable);
                             callback.doError(throwable);
                         }
                 )
         );
+    }
+
+    public void getProductDetail(MainCalback<ProductResponse> callback, String id) {
+        showLoading();
+        compositeDisposable.add(repository.getApiService().getProductDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                hideLoading();
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
+    public void getListAddresses(MainCalback<ResponseListObj<AddressResponse>> callback, Integer page) {
+        showLoading();
+        compositeDisposable.add(repository.getApiService().getListAddress(page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
+
+    public void getCart(MainCalback<CartResponse> callback) {
+        compositeDisposable.add(repository.getApiService().getCart()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
+    public void updateCartItem(UpdateCartItemRequest request) {
+        compositeDisposable.add(repository.getApiService().updateCartItem(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                        }, Timber::e));
     }
 }

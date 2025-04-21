@@ -47,46 +47,31 @@
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
+            android:id="@+id/l_sold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/start_1"
-                android:layout_width="@dimen/_14sdp"
-                android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/start_full"/>
-            <ImageView
-                android:id="@+id/start_2"
-                android:layout_width="@dimen/_14sdp"
-                android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/start_full"/>
-            <ImageView
-                android:id="@+id/start_3"
-                android:layout_width="@dimen/_14sdp"
-                android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/start_full"/>
-            <ImageView
-                android:id="@+id/start_4"
-                android:layout_width="@dimen/_14sdp"
-                android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/start_full"/>
-            <ImageView
-                android:id="@+id/start_5"
-                android:layout_width="@dimen/_14sdp"
-                android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/start_full"/>
+            android:orientation="horizontal"
+            android:gravity="end">
 
             <TextView
-                android:id="@+id/review_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(10)"
                 android:textColor="@color/text_second"
-                android:textSize="@dimen/_10ssp"
+                android:text="@string/sold"
+                android:textSize="@dimen/_9ssp"
+                android:fontFamily="@font/roboto_500"/>
+
+            <TextView
+                android:id="@+id/sold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="@color/text_second"
+                android:textSize="@dimen/_9ssp"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:gravity="center"
-                android:fontFamily="@font/roboto_500"/>
+                android:fontFamily="@font/roboto_500"
+                />
         </LinearLayout>
 
         <TextView
@@ -95,7 +80,7 @@
             android:layout_height="wrap_content"
             android:text="@string/category"
             android:textColor="@color/text_second"
-            android:textSize="@dimen/_12ssp"
+            android:textSize="@dimen/_10ssp"
             android:fontFamily="@font/roboto_500"/>
 
         <TextView

@@ -18,7 +18,11 @@ import dagger.Provides;
 import nix.cake.android.ui.main.cart.CartViewModel;
 import nix.cake.android.ui.main.home.HomeViewModel;
 import nix.cake.android.ui.main.login.UnLoginViewModel;
+import nix.cake.android.ui.main.product.find.FindProductFragmentViewModel;
 import nix.cake.android.ui.main.profile.ProfileViewModel;
+import nix.cake.android.ui.main.profile.address.detail.fragment.CommuneViewModel;
+import nix.cake.android.ui.main.profile.address.detail.fragment.DistrictViewModel;
+import nix.cake.android.ui.main.profile.address.detail.fragment.ProvinceViewModel;
 import nix.cake.android.ui.main.shop.ShopViewModel;
 
 @Module
@@ -74,5 +78,37 @@ public class FragmentModule {
         Supplier<UnLoginViewModel> supplier = () -> new UnLoginViewModel(repository, (MVVMApplication)application);
         ViewModelProviderFactory<UnLoginViewModel> factory = new ViewModelProviderFactory<>(UnLoginViewModel.class, supplier);
         return new ViewModelProvider(fragment, factory).get(UnLoginViewModel.class);
+    }
+
+    @Provides
+    @FragmentScope
+    FindProductFragmentViewModel provideFindProductFragmentViewModel(Repository repository, Context application) {
+        Supplier<FindProductFragmentViewModel> supplier = () -> new FindProductFragmentViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<FindProductFragmentViewModel> factory = new ViewModelProviderFactory<>(FindProductFragmentViewModel.class, supplier);
+        return new ViewModelProvider(fragment, factory).get(FindProductFragmentViewModel.class);
+    }
+
+    @Provides
+    @FragmentScope
+    ProvinceViewModel provideProvinceViewModel(Repository repository, Context application) {
+        Supplier<ProvinceViewModel> supplier = () -> new ProvinceViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<ProvinceViewModel> factory = new ViewModelProviderFactory<>(ProvinceViewModel.class, supplier);
+        return new ViewModelProvider(fragment, factory).get(ProvinceViewModel.class);
+    }
+
+    @Provides
+    @FragmentScope
+    DistrictViewModel provideDistrictViewModel(Repository repository, Context application) {
+        Supplier<DistrictViewModel> supplier = () -> new DistrictViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<DistrictViewModel> factory = new ViewModelProviderFactory<>(DistrictViewModel.class, supplier);
+        return new ViewModelProvider(fragment, factory).get(DistrictViewModel.class);
+    }
+
+    @Provides
+    @FragmentScope
+    CommuneViewModel provideCommuneViewModel(Repository repository, Context application) {
+        Supplier<CommuneViewModel> supplier = () -> new CommuneViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<CommuneViewModel> factory = new ViewModelProviderFactory<>(CommuneViewModel.class, supplier);
+        return new ViewModelProvider(fragment, factory).get(CommuneViewModel.class);
     }
 }
