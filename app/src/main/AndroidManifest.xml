@@ -65,6 +65,9 @@
         <activity android:name="nix.cake.android.ui.main.profile.address.ShippingAddressActivity"/>
         <activity android:name="nix.cake.android.ui.main.profile.address.detail.AddressDetailActivity"/>
         <activity android:name="nix.cake.android.ui.main.product.filter.FilterProductActivity"/>
+        <activity android:name="nix.cake.android.ui.main.product.detail.ProductDetailActivity"/>
+        <activity android:name="nix.cake.android.ui.main.login.VerifyOtpActivity"/>
+        <activity android:name="nix.cake.android.ui.main.product.find.FindProductActivity"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

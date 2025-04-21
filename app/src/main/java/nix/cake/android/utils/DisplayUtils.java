@@ -46,4 +46,7 @@ public class DisplayUtils {
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); // 隐藏软键盘
         immHide.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+    public static String convertDoubleTwoDecimalsHasCurrency(Double value) {
+        return String.format("đ %,d", value.longValue());
+    }
 }

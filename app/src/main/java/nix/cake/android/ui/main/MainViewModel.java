@@ -1,6 +1,6 @@
 package nix.cake.android.ui.main;
 
-import android.content.Intent;
+import androidx.databinding.ObservableBoolean;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
@@ -9,21 +9,27 @@ import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import nix.cake.android.MVVMApplication;
 import nix.cake.android.data.Repository;
-import nix.cake.android.data.model.api.ResponseWrapper;
+import nix.cake.android.data.model.api.ResponseListObj;
 import nix.cake.android.data.model.api.request.login.LoginRequest;
-import nix.cake.android.data.model.api.response.login.LoginResponse;
+import nix.cake.android.data.model.api.response.product.CategoryResponse;
+import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.ui.base.activity.BaseViewModel;
-import nix.cake.android.ui.main.login.LoginActivity;
 import nix.cake.android.utils.NetworkUtils;
 import retrofit2.HttpException;
 import timber.log.Timber;
 
 public class MainViewModel extends BaseViewModel {
-
+    public final ObservableBoolean isShowBottomNav = new ObservableBoolean(true);
     public MainViewModel(Repository repository, MVVMApplication application) {
         super(repository, application);
     }
+    public void showBottomNav(){
+        isShowBottomNav.set(true);
+    }
 
+    public void hideBottomNav(){
+        isShowBottomNav.set(false);
+    }
     public void doLogin(LoginRequest request) {
         showLoading();
         compositeDisposable.add(repository.getApiService().login(request)
@@ -113,5 +119,46 @@ public class MainViewModel extends BaseViewModel {
                                 showErrorMessage("Logout failed");
                             }
                         }));
+    }
+    public void getListCategories(MainCalback<ResponseListObj<CategoryResponse>> callback){
+        showLoading();
+        compositeDisposable.add(repository.getApiService().getListCategory()
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                application.getCurrentActivity().runOnUiThread(this::hideLoading);
+                                callback.doFail();
+                            }
+
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
+
+    public void getListProducts(MainCalback<ResponseListObj<ProductResponse>> callback, String categoryId){
+        showLoading();
+        compositeDisposable.add(repository.getApiService().getListProduct(categoryId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                application.getCurrentActivity().runOnUiThread(this::hideLoading);
+                                callback.doFail();
+                            }
+
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
     }
 }

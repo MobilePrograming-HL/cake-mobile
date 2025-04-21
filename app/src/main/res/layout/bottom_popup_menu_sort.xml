@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/menu_sort"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:fitsSystemWindows="true"
+        android:elevation="16dp"
+        android:background="@color/bg_show_popup_location">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/background_bottom_popup_menu">
+
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_12sdp"
+                android:src="@drawable/ic_close_popup"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/sort_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/close"
+                android:text="@string/sort_by"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/text"
+                android:textStyle="bold"
+                android:fontFamily="@font/roboto_500"
+                android:layout_marginBottom="@dimen/_12sdp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sort_by"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/popular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popular"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/text"
+                    android:fontFamily="@font/roboto_500"
+                    android:padding="@dimen/_12sdp"/>
+
+                <TextView
+                    android:id="@+id/newest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/newest"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/text"
+                    android:fontFamily="@font/roboto_500"
+                    android:padding="@dimen/_12sdp"/>
+
+                <TextView
+                    android:id="@+id/customer_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/customer_review"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/text"
+                    android:fontFamily="@font/roboto_500"
+                    android:padding="@dimen/_12sdp"/>
+
+                <TextView
+                    android:id="@+id/low_to_high"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price_lowest_to_highest"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:background="@color/textWarning"
+                    android:fontFamily="@font/roboto_500"
+                    android:padding="@dimen/_12sdp"/>
+
+                <TextView
+                    android:id="@+id/high_to_low"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price_highest_to_lowest"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/text"
+                    android:fontFamily="@font/roboto_500"
+                    android:padding="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</FrameLayout>

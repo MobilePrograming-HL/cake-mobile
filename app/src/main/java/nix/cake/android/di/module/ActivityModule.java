@@ -14,7 +14,10 @@ import nix.cake.android.ui.base.activity.BaseActivity;
 import nix.cake.android.ui.main.MainViewModel;
 import nix.cake.android.ui.main.login.LoginViewModel;
 import nix.cake.android.ui.main.login.SignUpViewModel;
+import nix.cake.android.ui.main.login.VerifyOtpViewModel;
+import nix.cake.android.ui.main.product.detail.ProductDetailViewModel;
 import nix.cake.android.ui.main.product.filter.FilterProductViewModel;
+import nix.cake.android.ui.main.product.find.FindProductViewModel;
 import nix.cake.android.ui.main.profile.address.ShippingAddressViewModel;
 import nix.cake.android.ui.main.profile.address.detail.AddressDetailViewModel;
 import nix.cake.android.ui.main.profile.order.MyOrdersViewModel;
@@ -48,7 +51,6 @@ public class ActivityModule {
     String provideDeviceId( Context applicationContext){
         return GetInfo.getAll(applicationContext);
     }
-
 
     @Provides
     @ActivityScope
@@ -112,5 +114,29 @@ public class ActivityModule {
         Supplier<FilterProductViewModel> supplier = () -> new FilterProductViewModel(repository, (MVVMApplication)application);
         ViewModelProviderFactory<FilterProductViewModel> factory = new ViewModelProviderFactory<>(FilterProductViewModel.class, supplier);
         return new ViewModelProvider(activity, factory).get(FilterProductViewModel.class);
+    }
+
+    @Provides
+    @ActivityScope
+    ProductDetailViewModel provideProductDetailViewModel(Repository repository, Context application) {
+        Supplier<ProductDetailViewModel> supplier = () -> new ProductDetailViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<ProductDetailViewModel> factory = new ViewModelProviderFactory<>(ProductDetailViewModel.class, supplier);
+        return new ViewModelProvider(activity, factory).get(ProductDetailViewModel.class);
+    }
+
+    @Provides
+    @ActivityScope
+    VerifyOtpViewModel provideVerifyOtpViewModel(Repository repository, Context application) {
+        Supplier<VerifyOtpViewModel> supplier = () -> new VerifyOtpViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<VerifyOtpViewModel> factory = new ViewModelProviderFactory<>(VerifyOtpViewModel.class, supplier);
+        return new ViewModelProvider(activity, factory).get(VerifyOtpViewModel.class);
+    }
+
+    @Provides
+    @ActivityScope
+    FindProductViewModel provideFindProductViewModel(Repository repository, Context application) {
+        Supplier<FindProductViewModel> supplier = () -> new FindProductViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<FindProductViewModel> factory = new ViewModelProviderFactory<>(FindProductViewModel.class, supplier);
+        return new ViewModelProvider(activity, factory).get(FindProductViewModel.class);
     }
 }

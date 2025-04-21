@@ -43,9 +43,9 @@ public class LoginViewModel extends BaseViewModel {
                                 HttpException httpException = (HttpException) throwable;
                                 if (httpException.code() == 400) {
                                 }
-                                showErrorMessage("Login failed");
+                                showNormalMessage("Incorrect account or password");
                             } else {
-                                showErrorMessage("Login failed");
+                                showNormalMessage("Incorrect account or password");
                             }
                         }));
     }

@@ -9,10 +9,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import java.util.Objects;
-
 import nix.cake.android.BR;
 import nix.cake.android.R;
+import nix.cake.android.data.model.api.ResponseListObj;
+import nix.cake.android.data.model.api.response.product.CategoryResponse;
+import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.databinding.ActivityMainBinding;
 import nix.cake.android.di.component.ActivityComponent;
 import nix.cake.android.ui.base.activity.BaseActivity;
@@ -48,7 +49,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
         viewBinding.setA(this);
         viewBinding.setVm(viewModel);
-        viewModel.setDeviceId(deviceId);
 
         fm = getSupportFragmentManager();
         homeFragment = new HomeFragment();
@@ -68,13 +68,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     active = homeFragment;
                     return true;
                 case R.id.shop:
-                    if (shopFragment == null){
-                        shopFragment = new ShopFragment();
-                        fm.beginTransaction().add(R.id.nav_host_fragment, shopFragment, SHOP).hide(active).commit();
-                    } else {
-                        fm.beginTransaction().hide(active).show(shopFragment).commit();
-                    }
-                    active = shopFragment;
+                    getListCategories();
                     return true;
                 case R.id.cart:
                     if (isLogin()) {
@@ -177,6 +171,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     public void performDependencyInjection(ActivityComponent buildComponent) {
         buildComponent.inject(this);
     }
+
+    public void hideBottomNav() {
+        viewModel.hideBottomNav();
+    }
+
+    public void showBottomNav() {
+        viewModel.showBottomNav();
+    }
     public void getMyOrders() {
         navigateToMyOrders();
     }
@@ -225,5 +227,79 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     public void login() {
         viewModel.showLoading();
         navigateToLogin();
+    }
+    public void getListCategories() {
+        viewModel.getListCategories(new MainCalback<ResponseListObj<CategoryResponse>>() {
+          @Override
+          public void doError(Throwable error) {
+          }
+
+          @Override
+          public void doSuccess() {
+
+          }
+
+        @Override
+        public void doFail() {
+
+        }
+
+        @Override
+          public void doSuccess(ResponseListObj<CategoryResponse> object) {
+              ShopFragment.CATEGORIES_LIST = object.getContent();
+              viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {
+                  @Override
+                  public void doError(Throwable error) {
+
+                  }
+
+                  @Override
+                  public void doSuccess() {
+
+                  }
+
+                  @Override
+                  public void doFail() {
+
+                  }
+
+                  @Override
+                    public void doSuccess(ResponseListObj<ProductResponse> object) {
+                        ShopFragment.PRODUCT_LIST = object.getContent();
+                      if (shopFragment == null){
+                          shopFragment = new ShopFragment();
+                          fm.beginTransaction().add(R.id.nav_host_fragment, shopFragment, SHOP).hide(active).commit();
+                      } else {
+                          fm.beginTransaction().hide(active).show(shopFragment).commit();
+                      }
+                      active = shopFragment;
+                      viewModel.hideLoading();
+                    }
+              }, null);
+          }
+      });
+    }
+    public void getListProducts(String categoryId) {
+        viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doFail() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                ShopFragment.PRODUCT_LIST = object.getContent();
+            }
+        }, categoryId);
     }
 }
