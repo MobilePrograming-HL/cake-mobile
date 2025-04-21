@@ -38,32 +38,49 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white">
+
                         <ImageView
                             android:id="@+id/search"
                             android:layout_width="@dimen/_35sdp"
                             android:layout_height="@dimen/_35sdp"
-                            android:src="@drawable/find"
-                            android:padding="@dimen/_10sdp"
                             android:layout_alignParentEnd="true"
                             android:layout_margin="@dimen/_12sdp"
-                            android:onClick="@{v -> f.onSearchClick()}"/>
+                            android:layout_marginStart="@dimen/_12sdp"
+                            android:layout_marginEnd="16dp"
+                            android:onClick="@{v -> f.onSearchClick()}"
+                            android:padding="@dimen/_10sdp"
+                            android:src="@drawable/find" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/search"
                             android:background="#F8F8F8">
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_category"
+                            <FrameLayout
+                                android:id="@+id/l_cate"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_30sdp"
                                 android:layout_marginTop="@dimen/_12sdp"
-                                android:paddingStart="@dimen/_12sdp"/>
+                                >
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_category"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:paddingStart="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+
+                                <include
+                                    android:id="@+id/progress_cate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    layout="@layout/layout_progress_bar_load_more" />
+                            </FrameLayout>
+
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_24sdp"
-                                android:layout_below="@+id/rv_category"
+                                android:layout_below="@+id/l_cate"
                                 android:background="@drawable/background_nav_filter"
                                 android:layout_margin="@dimen/_12sdp">
 
@@ -119,13 +136,24 @@
                         </RelativeLayout>
                     </RelativeLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_product"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/l_header"
-                        android:paddingStart="@dimen/_12sdp"
-                        tools:ignore="RtlSymmetry" />
+                        tools:ignore="RtlSymmetry" >
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_product"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingStart="@dimen/_12sdp"
+                            />
+                        <include
+                            android:id="@+id/progress"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            layout="@layout/layout_loading"
+                            android:visibility="visible"/>
+                    </FrameLayout>
 
                 </RelativeLayout>
             </FrameLayout>

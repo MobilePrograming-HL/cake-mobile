@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="f"
+            type="nix.cake.android.ui.main.product.find.FindProductFragment" />
+        <variable
+            name="vm"
+            type="nix.cake.android.ui.main.product.find.FindProductFragmentViewModel" />
+        <import type="android.view.View"/>
+    </data>
+
+    <FrameLayout
+        android:animateLayoutChanges="true"
+        android:background="@color/bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/l_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginBottom="@dimen/_12sdp">
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:src="@drawable/back"
+                    android:padding="@dimen/_10sdp"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{v -> f.onBackClick()}"
+                    android:layout_marginVertical="@dimen/_10ssp"/>
+
+                <EditText
+                    android:id="@+id/search"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/back"
+                    android:background="@drawable/background_text_box_search"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/text"
+                    android:fontFamily="@font/roboto_500"
+                    android:hint="@string/search"
+                    android:maxLines="1"
+                    android:layout_toStartOf="@+id/go"/>
+
+                <Button
+                    android:id="@+id/go"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:text="Go"
+                    android:background="@drawable/background_btn_search"
+                    android:textSize="@dimen/_12ssp"
+
+                    android:textColor="@color/white"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginHorizontal="@dimen/_12sdp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/l_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/l_search"
+                android:layout_marginBottom="@dimen/_12sdp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:layout_height="2dp"
+                    android:background="@color/text"
+                    android:layout_toStartOf="@+id/title"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/may_be"
+                    android:textSize="@dimen/_14ssp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_500"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/text"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:layout_height="2dp"
+                    android:background="@color/text"
+                    android:layout_toEndOf="@+id/title"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/l_title"
+                android:layout_marginTop="16dp" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+</layout>

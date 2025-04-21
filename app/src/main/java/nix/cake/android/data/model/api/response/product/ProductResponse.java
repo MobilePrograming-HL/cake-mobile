@@ -16,5 +16,7 @@ public class ProductResponse {
     private DiscountResponse discount;
     private int status;
     private String image;
+    private List<String> images;
     private Long totalSold;
+    private ReviewStatsResponse reviewStats;
 }

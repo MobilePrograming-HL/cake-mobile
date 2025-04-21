@@ -3,18 +3,27 @@ package nix.cake.android.ui.main.shop;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Layout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,16 +39,18 @@ import nix.cake.android.ui.main.product.adapter.ProductItemAdapter;
 import nix.cake.android.ui.main.product.find.FindProductActivity;
 import nix.cake.android.ui.main.shop.adapter.CategoryTagItemAdapter;
 
-public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewModel> {
-    public static List<CategoryResponse> CATEGORIES_LIST;
-    public static List<ProductResponse> PRODUCT_LIST;
+public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewModel> implements CategoryTagItemAdapter.OnItemClickListener, ProductItemAdapter.OnItemClickListener {
+    public static MutableLiveData<List<CategoryResponse>> CATEGORIES_LIST = new MutableLiveData<>();
+    public static MutableLiveData<List<ProductResponse>> PRODUCT_LIST = new MutableLiveData<>();
     private CategoryTagItemAdapter adapter;
-
     private ProductItemAdapter productAdapter;
-
     private BottomSheetBehavior sheetBehavior;
     private ArrayAdapter<String> sortAdapter;
     private int selectedPosition = 3;
+    private boolean isLoading = false;
+    private int currentPage = 0;
+    private String selectedCategoryId;
+    private Handler handler = new Handler(Looper.getMainLooper());
     private String[] sortOptions = {
             "Popular",
             "Newest",
@@ -47,41 +58,77 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
             "Price: Lowest to Highest",
             "Price: Highest to Lowest"
     };
+
     @Override
     protected void performDataBinding() {
         binding.setF(this);
         binding.setVm(viewModel);
-        viewModel.categoriesList = CATEGORIES_LIST;
         viewModel.productList = PRODUCT_LIST;
+
+        setUpObservers();
         setUpBottomSheet();
         setUpAdapterCategory();
+        setUpAdapterProduct();
     }
 
-    public void setUpAdapterCategory() {
-        if (viewModel.categoriesList == null) {
-            return;
-        }
-        adapter = new CategoryTagItemAdapter();
-        binding.rvCategory.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.rvCategory.setAdapter(adapter);
-        adapter.setData(viewModel.categoriesList);
-
-        if (viewModel.productList == null) {
-            return;
-        }
-        productAdapter = new ProductItemAdapter();
-        binding.rvProduct.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        binding.rvProduct.setAdapter(productAdapter);
-        productAdapter.setData(viewModel.productList);
+    private void setUpObservers() {
+        PRODUCT_LIST.observe(this, products -> {
+            if (productAdapter != null) {
+                binding.progress.progress.setVisibility(View.INVISIBLE);
+                productAdapter.setData(products);
+                isLoading = false;
+                if (products.isEmpty() && currentPage > 0) {
+                    currentPage--;
+                }
+            }
+        });
+        CATEGORIES_LIST.observe(this, categories -> {
+            if (productAdapter != null) {
+                binding.progressCate.progressBar.setVisibility(View.INVISIBLE);
+                adapter.setData(categories);
+            }
+        });
+    }
+    @Override
+    public void onItemClick(CategoryResponse category) {
+        selectedCategoryId = category.getId();
+        currentPage = 0;
+        PRODUCT_LIST.setValue(new ArrayList<>());
+        binding.progress.progress.setVisibility(View.VISIBLE);
+        ((MainActivity) requireActivity()).getListProduct(selectedCategoryId, currentPage);
     }
     public void setUpAdapterProduct() {
-        if (viewModel.productList == null) {
-            return;
-        }
-        productAdapter = new ProductItemAdapter();
-        binding.rvProduct.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        productAdapter = new ProductItemAdapter(this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2); // 2 columns
+        binding.rvProduct.setLayoutManager(gridLayoutManager);
         binding.rvProduct.setAdapter(productAdapter);
-        productAdapter.setData(viewModel.productList);
+
+        binding.rvProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    loadMoreData();
+                }
+            }
+        });
+    }
+    private void loadMoreData() {
+        if (isLoading) return;
+        isLoading = true;
+        currentPage++;
+        ((MainActivity) requireActivity()).getListProduct(selectedCategoryId, currentPage);
+    }
+    public void setUpAdapterCategory() {
+        adapter = new CategoryTagItemAdapter(this);
+        binding.rvCategory.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.rvCategory.setAdapter(adapter);
     }
     public void setUpBottomSheet() {
         sheetBehavior = BottomSheetBehavior.from(binding.menuSort);
@@ -164,24 +211,23 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
         binding.overlay.setVisibility(View.VISIBLE);
         sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
-
     public void onSearchClick() {
-        Intent it = new Intent(getContext(), FindProductActivity.class);
-        startActivity(it);
+        ((MainActivity) requireActivity()).navigateToSearchFragment();
     };
-
     @Override
     public int getBindingVariable() {
         return BR.vm;
     }
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_shop;
     }
-
     @Override
     protected void performDependencyInjection(FragmentComponent buildComponent) {
         buildComponent.inject(this);
+    }
+    @Override
+    public void onItemClick(ProductResponse product) {
+        ((MainActivity) requireActivity()).getProductDetail(product.getId());
     }
 }

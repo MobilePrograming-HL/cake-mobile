@@ -1,10 +1,15 @@
 package nix.cake.android.ui.base.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +51,7 @@ public abstract class BaseFragment <B extends ViewDataBinding,V extends BaseFrag
         binding.setVariable(getBindingVariable(),viewModel);
         performDataBinding();
         viewModel.setToken(token);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         viewModel.mErrorMessage.observe(getViewLifecycleOwner(),toastMessage -> {
             if (toastMessage!=null){
                 toastMessage.showMessage(requireContext());
@@ -62,6 +68,15 @@ public abstract class BaseFragment <B extends ViewDataBinding,V extends BaseFrag
                 }
             }
         });
+        binding.getRoot().setOnTouchListener((v, event) -> {
+            View focusedView = requireActivity().getCurrentFocus();
+            if (focusedView != null && focusedView instanceof EditText) {
+                hideKeyboard();
+                focusedView.clearFocus(); // clear focus khỏi EditText
+            }
+            return false;
+        });
+        setupEditorActionListenerForAllEditTexts(binding.getRoot());
         return binding.getRoot();
     }
 
@@ -71,6 +86,59 @@ public abstract class BaseFragment <B extends ViewDataBinding,V extends BaseFrag
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        hideKeyboard();
+    }
+    private void setupEditorActionListenerForAllEditTexts(View view) {
+        if (view instanceof EditText) {
+            EditText editText = (EditText) view;
+            editText.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                        actionId == EditorInfo.IME_ACTION_GO ||
+                        actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        actionId == EditorInfo.IME_ACTION_SEND ||
+                        (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                                event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                    hideKeyboard();
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                setupEditorActionListenerForAllEditTexts(child);
+            }
+        }
+    }
+    private void hideKeyboard() {
+        View view = requireActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+        clearFocusFromAllEditTexts(binding.getRoot());
+    }
+    public void clearFocusFromAllEditTexts(View view) {
+        if (view instanceof EditText) {
+            view.clearFocus();
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                clearFocusFromAllEditTexts(child);
+            }
+        }
+    }
     public abstract int getBindingVariable();
 
     protected abstract int getLayoutId();

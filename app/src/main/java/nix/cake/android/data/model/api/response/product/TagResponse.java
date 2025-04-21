@@ -7,4 +7,5 @@ public class TagResponse {
     private String id;
     private String code;
     private String name;
+    private boolean isSelected = false;
 }

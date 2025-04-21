@@ -38,9 +38,10 @@
     <string name="choose_all">Choose all</string>
     <string name="total_amount">Total amount:</string>
     <string name="_123">123$</string>
-    <string name="check_out">Check Out</string>
+    <string name="check_out">Checkout</string>
     <string name="my_orders">My orders</string>
     <string name="shipping_addresses">Shipping addresses</string>
+    <string name="my_addresses">My addresses</string>
     <string name="payment_method">Payment methods</string>
     <string name="coupon_code">Coupon codes</string>
     <string name="settings">Settings</string>
@@ -67,7 +68,9 @@
     <string name="buy">Buy</string>
     <string name="total">Total:</string>
     <string name="edit">Edit</string>
+    <string name="Add_address">Create address</string>
     <string name="edit_address">Edit address</string>
+
     <string name="phone">Phone</string>
     <string name="address_detail">Address</string>
     <string name="save_address">Save address</string>
@@ -92,4 +95,27 @@
     <string name="error_empty_otp">Please fill in all OTP fields.</string>
     <string name="search">Search</string>
     <string name="may_be">May be you like</string>
+    <string name="add_to_cart">ADD TO CART</string>
+    <string name="buy_now">BUY NOW</string>
+    <string name="invetory">Invetory:</string>
+    <string name="delete">Delete</string>
+    <string name="all">All</string>
+    <string name="make_default">Make Default</string>
+    <string name="province">Province</string>
+    <string name="district">District</string>
+    <string name="commune">Commune</string>
+    <string name="choose">Choose</string>
+    <string name="warning_name">Name should contain 2–40 characters</string>
+    <string name="warning_phone">Phone number should be 10 to 11 digits starting with 0</string>
+    <string name="warning_province">Please choose your province</string>
+    <string name="warning_district">Please choose your district</string>
+    <string name="warning_commune">Please choose your commune</string>
+    <string name="warning_address">Street address should contain 5–120 characters</string>
+    <string name="choose_province">Choose your province here</string>
+    <string name="choose_district">Choose your district here</string>
+    <string name="choose_commune">Choose your commune here</string>
+    <string name="default_address">Default</string>
+    <string name="set_as_default_address">Set as default address</string>
+    <string name="are_you_sure_to_delete_this_item">Are you sure to delete this item?</string>
+
 </resources>

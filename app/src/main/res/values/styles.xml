@@ -26,4 +26,19 @@
         <item name="android:textSize">@dimen/_11ssp</item>
         <item name="android:fontFamily">@font/application_font</item>
     </style>
+    <style name="CustomOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeColor">@color/text</item>
+        <item name="android:textColorHint">@color/text</item>
+        <item name="hintTextColor">@color/text</item>
+        <item name="endIconTint">@color/text</item>
+    </style>
+    <style name="WarningOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeColor">@color/warningColor</item>
+        <item name="android:textColorHint">@color/warningColor</item>
+        <item name="hintTextColor">@color/warningColor</item>
+        <item name="endIconTint">@color/warningColor</item>
+    </style>
+
 </resources>
