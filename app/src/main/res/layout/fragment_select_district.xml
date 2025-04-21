@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="f"
+            type="nix.cake.android.ui.main.profile.address.detail.fragment.DistrictFragment" />
+        <variable
+            name="vm"
+            type="nix.cake.android.ui.main.profile.address.detail.fragment.DistrictViewModel" />
+
+        <variable
+            name="countCheckout"
+            type="String" />
+        <import type="android.view.View"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <include
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/layout_empty"
+            android:visibility="invisible"/>
+    </FrameLayout>
+</layout>

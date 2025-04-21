@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="f"
+            type="nix.cake.android.ui.main.profile.address.detail.fragment.ProvinceFragment" />
+        <variable
+            name="vm"
+            type="nix.cake.android.ui.main.profile.address.detail.fragment.ProvinceViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:animateLayoutChanges="true">
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@color/white">-->
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                android:id="@+id/searchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="@dimen/_12sdp"-->
+
+<!--                android:background="@drawable/background_search_province"-->
+<!--                app:iconifiedByDefault="false"-->
+<!--                app:queryHint="@string/search"/>-->
+<!--        </RelativeLayout>-->
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <include
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_progress_bar_load_more" />
+
+    </LinearLayout>
+</layout>
