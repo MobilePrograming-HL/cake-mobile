@@ -12,11 +12,11 @@ import nix.cake.android.data.Repository;
 import nix.cake.android.data.model.api.ResponseListObj;
 import nix.cake.android.data.model.api.request.cart.UpdateCartItemRequest;
 import nix.cake.android.data.model.api.request.login.LoginRequest;
-import nix.cake.android.data.model.api.request.profile.AddressRequest;
 import nix.cake.android.data.model.api.response.cart.CartResponse;
 import nix.cake.android.data.model.api.response.product.CategoryResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
+import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import nix.cake.android.ui.base.activity.BaseViewModel;
 import nix.cake.android.utils.NetworkUtils;
 import retrofit2.HttpException;
@@ -144,7 +144,7 @@ public class MainViewModel extends BaseViewModel {
     }
 
     public void getListProducts(MainCalback<ResponseListObj<ProductResponse>> callback, String categoryId, Integer page) {
-        compositeDisposable.add(repository.getApiService().getListProduct(categoryId, page)
+        compositeDisposable.add(repository.getApiService().getListProduct(categoryId, 10, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -183,9 +183,8 @@ public class MainViewModel extends BaseViewModel {
                 )
         );
     }
-    public void getListAddresses(MainCalback<ResponseListObj<AddressResponse>> callback, Integer page) {
-        showLoading();
-        compositeDisposable.add(repository.getApiService().getListAddress(page)
+    public void getListAddresses(MainCalback<ResponseListObj<AddressResponse>> callback, Integer size) {
+        compositeDisposable.add(repository.getApiService().getListAddress(size)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -228,5 +227,49 @@ public class MainViewModel extends BaseViewModel {
                 .subscribe(
                         response -> {
                         }, Timber::e));
+    }
+    public void deleteCartItem(String id) {
+        compositeDisposable.add(repository.getApiService().deleteCartItem(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                        }, Timber::e));
+    }
+    public void getListOrder(MainCalback<ResponseListObj<OrderResponse>> callback, Integer size) {
+        compositeDisposable.add(repository.getApiService().getListOrder(size, null)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
+    public void searchProduct(MainCalback<ResponseListObj<ProductResponse>> callback, String categoryId, Integer size, String name, String sort) {
+        compositeDisposable.add(repository.getApiService().searchProduct(categoryId, size, name, sort)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
     }
 }

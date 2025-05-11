@@ -2,6 +2,8 @@ package nix.cake.android.ui.main.profile.address.detail;
 
 import android.app.Application;
 
+import androidx.databinding.ObservableBoolean;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import nix.cake.android.MVVMApplication;
@@ -16,6 +18,7 @@ import nix.cake.android.ui.main.MainCalback;
 import timber.log.Timber;
 
 public class AddressDetailViewModel extends BaseViewModel {
+    public ObservableBoolean isDefault = new ObservableBoolean(false);
     public AddressDetailViewModel(Repository repository, MVVMApplication application) {
         super(repository, application);
     }
@@ -65,7 +68,7 @@ public class AddressDetailViewModel extends BaseViewModel {
                 .subscribe(
                         response -> {
                             hideLoading();
-                            showSuccessMessage("Add Success");
+                            showNormalMessage("Add Success");
                             application.getCurrentActivity().finish();
                         }, throwable -> {
                             hideLoading();
@@ -82,7 +85,7 @@ public class AddressDetailViewModel extends BaseViewModel {
                 .subscribe(
                         response -> {
                             hideLoading();
-                            showSuccessMessage("Update Success");
+                            showNormalMessage("Update Success");
                             application.getCurrentActivity().finish();
                         }, throwable -> {
                             hideLoading();

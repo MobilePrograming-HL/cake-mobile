@@ -1,10 +1,14 @@
 package nix.cake.android.ui.main.profile.address.detail;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
@@ -14,6 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.List;
 import java.util.Objects;
 
 import eu.davidea.flexibleadapter.databinding.BR;
@@ -52,29 +57,50 @@ public class AddressDetailActivity extends BaseActivity<ActivityAddressDetailBin
         super.onCreate(savedInstanceState);
         viewBinding.setA(this);
         viewBinding.setVm(viewModel);
+        setupForm();
         setupDrawer();
         setUpAddress();
         setupViewPager();
-        setupForm();
+
         setupTextWatchers();
         setupFocusListeners();
         setupLocationFieldsListeners();
+        startFakeLoading(viewBinding.progressLoadingFirst.progressBar);
     }
 
     private void setupForm() {
-        if (ADDRESS_DETAIL != null) {
-            viewBinding.name.setText(Objects.requireNonNull(ADDRESS_DETAIL).getFullName());
-            viewBinding.phone.setText(ADDRESS_DETAIL.getPhoneNumber());
-            viewBinding.province.setText(ADDRESS_DETAIL.getProvince().getName());
-            viewBinding.district.setText(ADDRESS_DETAIL.getDistrict().getName());
-            viewBinding.commune.setText(ADDRESS_DETAIL.getCommune().getName());
-            viewBinding.address.setText(ADDRESS_DETAIL.getDetails());
-            getListProvince(Constants.PAGE_START);
-            getListDistrict(PROVINCE.getId(), Constants.PAGE_START);
-            getListCommune(DISTRICT.getId(), Constants.PAGE_START);
-
-
+        if (fakeProgressAnimator != null && fakeProgressAnimator.isRunning()) {
+            fakeProgressAnimator.cancel();
         }
+
+        ValueAnimator completeAnimator = ValueAnimator.ofInt(currentProgress, 100);
+        completeAnimator.setDuration(300);
+        completeAnimator.setInterpolator(new DecelerateInterpolator());
+        completeAnimator.addUpdateListener(anim -> {
+            int value = (int) anim.getAnimatedValue();
+            viewBinding.progressLoadingFirst.progressBar.setProgress(value);
+        });
+
+        completeAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (ADDRESS_DETAIL != null) {
+                    viewBinding.name.setText(Objects.requireNonNull(ADDRESS_DETAIL).getFullName());
+                    viewBinding.phone.setText(ADDRESS_DETAIL.getPhoneNumber());
+                    viewBinding.province.setText(ADDRESS_DETAIL.getProvince().getName());
+                    viewBinding.district.setText(ADDRESS_DETAIL.getDistrict().getName());
+                    viewBinding.commune.setText(ADDRESS_DETAIL.getCommune().getName());
+                    viewBinding.address.setText(ADDRESS_DETAIL.getDetails());
+                    viewModel.isDefault.set(ADDRESS_DETAIL.getIsDefault());
+                    getListProvince(Constants.PAGE_START);
+                    getListDistrict(PROVINCE.getId(), Constants.PAGE_START);
+                    getListCommune(DISTRICT.getId(), Constants.PAGE_START);
+                }
+                viewBinding.progressLoadingFirst.getRoot().setVisibility(View.GONE);
+            }
+        });
+
+        completeAnimator.start();
     }
     private void setupViewPager() {
         viewPagerAdapter = new AddressViewPagerAdapter(this);

@@ -60,8 +60,8 @@ public class ProductItemAdapter extends RecyclerView.Adapter<ProductItemAdapter.
 
         Glide.with(holder.itemView.getContext())
                 .load(product.getImage())
-                .placeholder(R.drawable.cake_default)
-                .error(R.drawable.cake_default)
+                .placeholder(R.color.img_default)
+                .error(R.color.img_default)
                 .into(holder.binding.img);
 
         if (product.getTotalSold() == 0) {

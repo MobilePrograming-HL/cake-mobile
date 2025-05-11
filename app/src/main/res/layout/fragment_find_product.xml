@@ -18,15 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <RelativeLayout
                 android:id="@+id/l_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:layout_marginBottom="@dimen/_12sdp">
+                android:background="@color/white">
                 <ImageView
                     android:id="@+id/back"
                     android:layout_width="@dimen/_35sdp"
@@ -55,58 +55,70 @@
                     android:id="@+id/go"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:text="Go"
+                    android:text="@string/go"
                     android:background="@drawable/background_btn_search"
                     android:textSize="@dimen/_12ssp"
-
+                    android:onClick="@{v -> f.onSearchClick()}"
                     android:textColor="@color/white"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginHorizontal="@dimen/_12sdp"/>
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/l_title"
+            <LinearLayout
+                android:id="@+id/l_recent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/l_search"
-                android:layout_marginBottom="@dimen/_12sdp">
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:visibility="gone">
 
-                <View
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="horizontal">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="@string/recently_searched"
+                         android:textSize="@dimen/_12ssp"
+                         android:textStyle="bold"
+                         android:fontFamily="@font/roboto_500"
+                         android:textColor="@color/text"
+                         android:layout_margin="@dimen/_6sdp"/>
+                 </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_recent"
                     android:layout_width="match_parent"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    android:layout_height="2dp"
-                    android:background="@color/text"
-                    android:layout_toStartOf="@+id/title"
-                    android:layout_centerVertical="true"/>
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/may_be"
-                    android:textSize="@dimen/_14ssp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/roboto_500"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/text"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    android:layout_height="2dp"
-                    android:background="@color/text"
-                    android:layout_toEndOf="@+id/title"
-                    android:layout_centerVertical="true"/>
-            </RelativeLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv"
+            <LinearLayout
+                android:id="@+id/l_cate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/l_title"
-                android:layout_marginTop="16dp" />
+                android:orientation="vertical"
+                android:background="@color/white">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/categories"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_500"
+                    android:textColor="@color/text"
+                    android:layout_margin="@dimen/_6sdp"/>
 
-        </RelativeLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginBottom="@dimen/_6sdp"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
     </FrameLayout>
 </layout>

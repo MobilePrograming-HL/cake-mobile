@@ -12,6 +12,8 @@ import nix.cake.android.di.scope.ActivityScope;
 import nix.cake.android.di.scope.FragmentScope;
 import nix.cake.android.ui.base.activity.BaseActivity;
 import nix.cake.android.ui.main.MainViewModel;
+import nix.cake.android.ui.main.cart.order.CreateOrderViewModel;
+import nix.cake.android.ui.main.cart.order.OrderSuccessViewModel;
 import nix.cake.android.ui.main.login.LoginViewModel;
 import nix.cake.android.ui.main.login.SignUpViewModel;
 import nix.cake.android.ui.main.login.VerifyOtpViewModel;
@@ -138,5 +140,21 @@ public class ActivityModule {
         Supplier<FindProductViewModel> supplier = () -> new FindProductViewModel(repository, (MVVMApplication)application);
         ViewModelProviderFactory<FindProductViewModel> factory = new ViewModelProviderFactory<>(FindProductViewModel.class, supplier);
         return new ViewModelProvider(activity, factory).get(FindProductViewModel.class);
+    }
+
+    @Provides
+    @ActivityScope
+    CreateOrderViewModel provideCreateOrderViewModel(Repository repository, Context application) {
+        Supplier<CreateOrderViewModel> supplier = () -> new CreateOrderViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<CreateOrderViewModel> factory = new ViewModelProviderFactory<>(CreateOrderViewModel.class, supplier);
+        return new ViewModelProvider(activity, factory).get(CreateOrderViewModel.class);
+    }
+
+    @Provides
+    @ActivityScope
+    OrderSuccessViewModel provideOrderSuccessViewModel(Repository repository, Context application) {
+        Supplier<OrderSuccessViewModel> supplier = () -> new OrderSuccessViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<OrderSuccessViewModel> factory = new ViewModelProviderFactory<>(OrderSuccessViewModel.class, supplier);
+        return new ViewModelProvider(activity, factory).get(OrderSuccessViewModel.class);
     }
 }

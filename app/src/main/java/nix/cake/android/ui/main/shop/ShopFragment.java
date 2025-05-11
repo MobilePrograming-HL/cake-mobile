@@ -146,7 +146,7 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
                 if (position == selectedPosition) {
                     textView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                     textView.setTypeface(null, Typeface.NORMAL);
-                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.textWarning));
+                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.text));
                 } else {
                     textView.setTextColor(ContextCompat.getColor(getContext(), R.color.text));
                     textView.setTypeface(null, Typeface.NORMAL);

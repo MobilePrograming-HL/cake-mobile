@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginBottom="@dimen/_12sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/l_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:paddingTop="@dimen/_12sdp"
+                android:layout_marginBottom="1dp">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/text"
+                    android:fontFamily="@font/roboto_500"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone"
+                    android:textSize="@dimen/_10ssp"
+                    android:textColor="@color/text_second"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:fontFamily="@font/roboto_500"/>
+
+                <TextView
+                    android:id="@+id/address_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_detail"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/text_second"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:fontFamily="@font/roboto_500"/>
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_detail"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/text_second"
+                    android:fontFamily="@font/roboto_500"
+                    android:layout_marginBottom="@dimen/_12sdp"/>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true">
+                <ImageView
+                    android:id="@+id/check_default"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/checked"
+                    android:layout_gravity="center|end"/>
+            </FrameLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="@dimen/_12sdp"
+            >
+
+            <TextView
+                android:id="@+id/tv_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_address"
+                android:textColor="@color/text_second"
+                android:background="@color/bg"
+                android:paddingHorizontal="@dimen/_3sdp"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/roboto_500"
+                android:layout_centerVertical="true"
+                android:visibility="invisible"/>
+            <FrameLayout
+                android:id="@+id/edit"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/edit"
+                    android:layout_gravity="center|end"/>
+            </FrameLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>

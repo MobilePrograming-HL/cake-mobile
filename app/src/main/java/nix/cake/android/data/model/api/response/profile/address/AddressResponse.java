@@ -1,5 +1,7 @@
 package nix.cake.android.data.model.api.response.profile.address;
 
+import java.util.Objects;
+
 import lombok.Data;
 @Data
 public class AddressResponse {
@@ -10,5 +12,6 @@ public class AddressResponse {
     private String details;
     private String fullName;
     private String phoneNumber;
-    private String isDefault;
+    private Boolean isDefault;
+    private Boolean isSelect = false;
 }

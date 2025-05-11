@@ -28,7 +28,7 @@
                     android:id="@+id/img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/cake_default"/>
+                    android:src="@color/img_default"/>
 
                 <TextView
                     android:id="@+id/percent_sale"
@@ -51,7 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="end">
+            android:gravity="end"
+
+            android:layout_marginEnd="@dimen/_6sdp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +83,8 @@
             android:text="@string/category"
             android:textColor="@color/text_second"
             android:textSize="@dimen/_10ssp"
-            android:fontFamily="@font/roboto_500"/>
+            android:fontFamily="@font/roboto_500"
+            android:layout_marginStart="@dimen/_6sdp"/>
 
         <TextView
             android:id="@+id/name"
@@ -93,12 +96,14 @@
             android:layout_marginTop="@dimen/_4sdp"
             android:textStyle="bold"
             android:layout_marginBottom="@dimen/_4sdp"
-            android:fontFamily="@font/roboto_500"/>
+            android:fontFamily="@font/roboto_500"
+            android:layout_marginStart="@dimen/_6sdp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_12ssp">
+            android:layout_marginBottom="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_6sdp">
 
             <TextView
                 android:id="@+id/price"

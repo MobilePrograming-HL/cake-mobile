@@ -1,5 +1,6 @@
 package nix.cake.android.ui.base.fragment;
 
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -7,9 +8,11 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +40,8 @@ public abstract class BaseFragment <B extends ViewDataBinding,V extends BaseFrag
     protected V viewModel;
 
     private Dialog progressDialog;
+    public ValueAnimator fakeProgressAnimator;
+    public int currentProgress = 0;
 
 
     @Named("access_token")
@@ -77,6 +82,7 @@ public abstract class BaseFragment <B extends ViewDataBinding,V extends BaseFrag
             return false;
         });
         setupEditorActionListenerForAllEditTexts(binding.getRoot());
+
         return binding.getRoot();
     }
 
@@ -84,6 +90,16 @@ public abstract class BaseFragment <B extends ViewDataBinding,V extends BaseFrag
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+    protected void startFakeLoading(ProgressBar progressBar) {
+        fakeProgressAnimator = ValueAnimator.ofInt(0, 90);
+        fakeProgressAnimator.setDuration(1000);
+        fakeProgressAnimator.setInterpolator(new LinearInterpolator());
+        fakeProgressAnimator.addUpdateListener(animation -> {
+            currentProgress = (int) animation.getAnimatedValue();
+            progressBar.setProgress(currentProgress);
+        });
+        fakeProgressAnimator.start();
     }
 
     @Override

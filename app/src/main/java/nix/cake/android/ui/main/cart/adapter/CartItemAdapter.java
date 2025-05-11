@@ -39,14 +39,16 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         void onPlusItem(CartItemResponse item);
         void onMinusItem(CartItemResponse item);
         void onTextCountItemChange(CartItemResponse item);
-        void onDelete(CartItemResponse item);
+        void onDelete(CartItemResponse item, int position);
         void onSelectClick(CartItemResponse item);
     }
     public CartItemAdapter(OnItemClickListener listener) {
         this.data = new ArrayList<>();
         this.listener = listener;
     }
-
+    public Boolean isEmptyData() {
+        return data.isEmpty();
+    }
     @NonNull
     @Override
     public CartItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,8 +70,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         updateDefaultUI(holder,item);
         Glide.with(holder.itemView.getContext())
                 .load(item.getProduct().getImage())
-                .placeholder(R.drawable.cake_default)
-                .error(R.drawable.cake_default)
+                .placeholder(R.color.img_default)
+                .error(R.color.img_default)
                 .into(holder.binding.img);
         if (item.getProduct().getDiscount() == null) {
             holder.binding.priceAfterSale.setVisibility(View.GONE);
@@ -188,7 +190,12 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
                 }
             }
         });
-
+        holder.binding.actionDelete.setOnClickListener(v -> {
+            if (listener != null ) {
+                listener.onDelete(item, holder.getAdapterPosition());
+                holder.binding.swipeLayout.close(false);
+            }
+        });
     }
     private void updateDefaultUI(CartItemViewHolder holder, CartItemResponse cart) {
         if (cart.getIsSelect()) {
@@ -203,7 +210,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
                 .collect(Collectors.toMap(CartItemResponse::getId, cartItemResponse -> true));
 
         this.data.clear();
-
         cartItemResponses.forEach(item -> {
             item.setIsSelect(oldSelections.getOrDefault(item.getId(), false));
         });
@@ -211,8 +217,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         this.data.addAll(cartItemResponses);
         notifyDataSetChanged();
     }
-
-
+    public void removeCartItem(int position) {
+        if (position >= 0 && position < data.size()) {
+            data.remove(position);
+            notifyItemRemoved(position);
+            notifyDataSetChanged();
+        }
+    }
     @Override
     public int getItemCount() {
         return data.size();
@@ -226,105 +237,3 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         }
     }
 }
-
-
-//public class MainActivity extends AppCompatActivity implements CartItemAdapter.OnItemClickListener {
-//
-//    private CartItemAdapter adapter;
-//    private List<CartItemResponse> cartItems;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        // Khởi tạo danh sách mẫu
-//        cartItems = new ArrayList<>();
-//        // Thêm dữ liệu vào cartItems (tùy thuộc vào API hoặc logic của bạn)
-//
-//        adapter = new CartItemAdapter(cartItems, this);
-//        recyclerView.setAdapter(adapter);
-//
-//        // Thiết lập ItemTouchHelper
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-//                0, ItemTouchHelper.LEFT) {
-//
-//            @Override
-//            public boolean onMove(@NonNull RecyclerView recyclerView,
-//                                  @NonNull RecyclerView.ViewHolder viewHolder,
-//                                  @NonNull RecyclerView.ViewHolder target) {
-//                return false; // Không hỗ trợ kéo thả
-//            }
-//
-//            @Override
-//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                if (direction == ItemTouchHelper.LEFT) {
-//                    int position = viewHolder.getAdapterPosition();
-//                    CartItemResponse item = cartItems.get(position);
-//                    cartItems.remove(position);
-//                    adapter.notifyItemRemoved(position);
-//                    Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-//                                    @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
-//                                    int actionState, boolean isCurrentlyActive) {
-//                View itemView = viewHolder.itemView;
-//                LinearLayout actionLayout = itemView.findViewById(R.id.swipe_action_layout);
-//
-//                // Hiển thị layout nút hành động khi vuốt sang trái
-//                if (dX < 0) {
-//                    actionLayout.setTranslationX(dX);
-//                    itemView.setTranslationX(dX); // Di chuyển toàn bộ itemView
-//                } else {
-//                    actionLayout.setTranslationX(0f);
-//                    itemView.setTranslationX(0f);
-//                }
-//
-//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-//            }
-//        });
-//
-//        itemTouchHelper.attachToRecyclerView(recyclerView);
-//    }
-//
-//    @Override
-//    public void onItemClick(CartItemResponse cart) {
-//        Toast.makeText(this, "Item clicked: " + cart.getPrice(), Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    public void onDelete(CartItemResponse cart) {
-//        int position = cartItems.indexOf(cart);
-//        if (position != -1) {
-//            cartItems.remove(position);
-//            adapter.notifyItemRemoved(position);
-//            Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-//
-//    @Override
-//    public void onAddItem(CartItemResponse cart) {
-//        int position = cartItems.indexOf(cart);
-//        if (position != -1) {
-//            // Cập nhật số lượng (tùy logic của bạn)
-//            // cart.setQuantity(cart.getQuantity() + 1);
-//            adapter.notifyItemChanged(position);
-//        }
-//    }
-//
-//    @Override
-//    public void onRemoveItem(CartItemResponse cart) {
-//        int position = cartItems.indexOf(cart);
-//        if (position != -1) {
-//            // Cập nhật số lượng (tùy logic của bạn)
-//            // if (cart.getQuantity() > 1) cart.setQuantity(cart.getQuantity() - 1);
-//            adapter.notifyItemChanged(position);
-//        }
-//    }
-//}

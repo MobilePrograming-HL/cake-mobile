@@ -2,16 +2,21 @@ package nix.cake.android.ui.main.profile.order.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import nix.cake.android.R;
+import nix.cake.android.data.model.api.response.profile.order.OrderItemResponse;
 import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import nix.cake.android.databinding.ItemOrderBinding;
+import nix.cake.android.utils.DisplayUtils;
 
 public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.OrderItemViewHolder> {
 
@@ -20,7 +25,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
 
     public interface OnItemClickListener {
         void onItemClick(OrderResponse order);
-        void onCancelClick(OrderResponse order);
+        void onCancelClick(OrderItemResponse order);
     }
     public OrderItemAdapter() {
         this.data = new ArrayList<>();
@@ -47,15 +52,33 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     @Override
     public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
         OrderResponse order = data.get(position);
+        holder.binding.setTotal(DisplayUtils.convertDoubleTwoDecimalsHasCurrency(order.getTotalAmount()));
+        holder.binding.statusOrder.setText(order.getStatus().getOrderStatus(order.getStatus().getStatus()));
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(order);
+            }
+        });
+        if (order.getOrderItems().size() <= 1) {
+            holder.binding.more.setVisibility(View.GONE);
+            ItemOrderItemAdapter childAdapter = new ItemOrderItemAdapter(order.getOrderItems());
+            holder.binding.rvProduct.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+            holder.binding.rvProduct.setAdapter(childAdapter);
+        }
+        else {
+            List<OrderItemResponse> firstOrderItem = order.getOrderItems().subList(0, 1);
+            ItemOrderItemAdapter childAdapter = new ItemOrderItemAdapter(firstOrderItem);
+            holder.binding.rvProduct.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+            holder.binding.rvProduct.setAdapter(childAdapter);
 
-        holder.binding.orderNumber.setText(order.getId().toString());
-        holder.binding.quantity.setText(String.valueOf(order.getQuantity()));
-        holder.binding.statusOrder.setText(order.getStatus());
-        holder.binding.dateOrder.setText(order.getDateOrder());
-        holder.binding.total.setText(order.getTotal().toString());
+            holder.binding.more.setVisibility(View.VISIBLE);
 
-        holder.binding.cancelOrder.setOnClickListener(v -> listener.onCancelClick(order));
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(order));
+            holder.binding.more.setOnClickListener(v -> {
+                ItemOrderItemAdapter fullAdapter = new ItemOrderItemAdapter(order.getOrderItems());
+                holder.binding.rvProduct.setAdapter(fullAdapter);
+                holder.binding.more.setVisibility(View.GONE);
+            });
+        }
     }
 
     @Override
@@ -67,18 +90,6 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         this.data.clear();
         this.data.addAll(orders);
         notifyDataSetChanged();
-    }
-
-    public void addOrder(OrderResponse order) {
-        this.data.add(order);
-        notifyItemInserted(data.size() - 1);
-    }
-
-    public void removeOrder(int position) {
-        if (position >= 0 && position < data.size()) {
-            data.remove(position);
-            notifyItemRemoved(position);
-        }
     }
     public static class OrderItemViewHolder extends RecyclerView.ViewHolder {
         ItemOrderBinding binding;
