@@ -22,123 +22,101 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <RelativeLayout
-                    android:id="@+id/l_sale"
+                <FrameLayout
+                    android:id="@+id/img_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/title_sale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sale"
-                        android:textSize="@dimen/_24ssp"
-                        android:textColor="@color/text"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/roboto_500"
-                        android:layout_marginVertical="@dimen/_20sdp" />
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/img"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_250sdp"
+                        android:src="@color/img_default"/>
 
-                    <TextView
-                        android:id="@+id/view_all_sale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/view_all"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/text"
-                        android:fontFamily="@font/roboto_500"
-                        android:layout_marginVertical="@dimen/_30sdp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="@dimen/_12sdp"/>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_240sdp"
+                    android:background="@drawable/background_home_fragment"
+                    android:orientation="vertical">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_sale"
+                        android:id="@+id/rv_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/title_sale"/>
+                        android:layout_marginTop="@dimen/_6sdp"/>
 
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/l_new"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp">
-
-                    <TextView
-                        android:id="@+id/title_new"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/new_product"
-                        android:textSize="@dimen/_24ssp"
-                        android:textColor="@color/text"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/roboto_500"
-                        android:layout_marginVertical="@dimen/_20sdp" />
-
-                    <TextView
-                        android:id="@+id/view_all_new"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/view_all"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/text"
-                        android:fontFamily="@font/roboto_500"
-                        android:layout_marginVertical="@dimen/_30sdp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="@dimen/_12sdp"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_new"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/title_new"/>
+                        android:orientation="horizontal"
+                        android:weightSum="3"
+                        android:padding="@dimen/_6sdp">
 
-                </RelativeLayout>
+                        <TextView
+                            android:id="@+id/new_in"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_weight="1"
+                            android:text="New In"
+                            android:textSize="@dimen/_10ssp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:background="@drawable/background_tag_select"
+                            android:gravity="center"
+                            android:layout_marginHorizontal="@dimen/_6sdp"/>
 
-                <RelativeLayout
-                    android:id="@+id/l_popular"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp">
+                        <TextView
+                            android:id="@+id/deals"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_weight="1"
+                            android:text="@string/deals"
+                            android:textSize="@dimen/_10ssp"
+                            android:textColor="@color/text"
+                            android:background="@drawable/background_tag"
+                            android:gravity="center"
+                            android:layout_marginHorizontal="@dimen/_6sdp"/>
 
-                    <TextView
-                        android:id="@+id/title_popular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/popular"
-                        android:textSize="@dimen/_24ssp"
-                        android:textColor="@color/text"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/roboto_500"
-                        android:layout_marginVertical="@dimen/_20sdp" />
+                        <TextView
+                            android:id="@+id/best_sellers"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_weight="1"
+                            android:text="@string/best_sellers"
+                            android:textSize="@dimen/_10ssp"
+                            android:textColor="@color/text"
+                            android:background="@drawable/background_tag"
+                            android:gravity="center"
+                            android:layout_marginHorizontal="@dimen/_6sdp"/>
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/view_all_popular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/view_all"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/text"
-                        android:fontFamily="@font/roboto_500"
-                        android:layout_marginVertical="@dimen/_30sdp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="@dimen/_12sdp"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_popular"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/title_popular"/>
-
-                </RelativeLayout>
-            </LinearLayout>
-
+                        android:layout_height="match_parent"
+                        android:background="@color/bg">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_product"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingStart="@dimen/_12sdp"
+                            />
+                        <include
+                            android:id="@+id/progress"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            layout="@layout/layout_loading"
+                            android:visibility="visible"
+                            android:layout_marginTop="@dimen/_30sdp"/>
+                    </FrameLayout>
+                </LinearLayout>
+            </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
 
     </FrameLayout>

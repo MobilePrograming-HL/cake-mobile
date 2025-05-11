@@ -11,6 +11,7 @@
             name="vm"
             type="nix.cake.android.ui.main.profile.address.ShippingAddressViewModel" />
         <import type="android.view.View"/>
+        <import type="androidx.databinding.ObservableBoolean"/>
     </data>
     <FrameLayout
         android:id="@+id/l_my_order"
@@ -58,12 +59,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="1dp"/>
-                <include
-                    android:id="@+id/empty"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    layout="@layout/layout_empty"
-                    android:visibility="invisible"/>
+                    android:visibility="@{vm.isEmpty ? View.VISIBLE : View.GONE}">
+
+                    <include layout="@layout/layout_empty"/>
+                </FrameLayout>
+
+                <include
+                    android:id="@+id/progress_loading_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    layout="@layout/layout_loading_progressbar_top"
+                    android:visibility="visible"/>
+
             </FrameLayout>
 
 

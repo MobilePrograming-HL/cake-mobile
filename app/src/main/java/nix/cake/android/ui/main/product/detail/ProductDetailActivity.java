@@ -23,20 +23,28 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import nix.cake.android.BR;
 import nix.cake.android.R;
+import nix.cake.android.constant.Constants;
+import nix.cake.android.data.model.api.ResponseListObj;
 import nix.cake.android.data.model.api.request.cart.CartRequest;
+import nix.cake.android.data.model.api.response.cart.CartItemResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.data.model.api.response.product.TagResponse;
+import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
 import nix.cake.android.databinding.ActivityProductDetailBinding;
 import nix.cake.android.di.component.ActivityComponent;
 import nix.cake.android.ui.base.activity.BaseActivity;
+import nix.cake.android.ui.main.MainActivity;
+import nix.cake.android.ui.main.MainCalback;
+import nix.cake.android.ui.main.cart.order.CreateOrderActivity;
 import nix.cake.android.ui.main.login.LoginActivity;
 import nix.cake.android.ui.main.product.detail.adapter.ImageSliderAdapter;
 import nix.cake.android.ui.main.product.detail.adapter.ProductTagItemAdapter;
-
 public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBinding, ProductDetailViewModel> implements ProductTagItemAdapter.OnItemClickListener, View.OnClickListener {
 
     public static ProductResponse PRODUCT_DETAIL;
@@ -56,6 +64,7 @@ public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBin
         setUpBottomSheet();
     }
 
+    @SuppressLint("SetTextI18n")
     public void setUpProductDetail() {
         viewBinding.setItem(viewModel.productDetail);
 
@@ -211,6 +220,7 @@ public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBin
     }
 
     public void onBuyNowOrAddToCartClick() {
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         hideKeyboard();
         if (TYPE_HANDLE == R.string.add_to_cart) {
             handleAddToCart();
@@ -221,6 +231,30 @@ public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBin
     }
 
     private void handleBuyNow() {
+        List<CartItemResponse> cartItems = new ArrayList<>();
+        CartItemResponse cartItem = new CartItemResponse();
+        nix.cake.android.data.model.api.response.cart.ProductResponse product = new nix.cake.android.data.model.api.response.cart.ProductResponse();
+        product.setId(viewModel.productDetail.getId());
+        product.setName(viewModel.productDetail.getName());
+        product.setPrice(viewModel.productDetail.getPriceOfProduct());
+        product.setImage(viewModel.productDetail.getImages().get(0));
+        product.setImages(viewModel.productDetail.getImages());
+        cartItem.setProduct(product);
+        cartItem.setQuantity(viewModel.quantity);
+        cartItem.setTag(viewModel.tag);
+
+        if (viewModel.tag != null) {
+            cartItem.setTag(viewModel.tag);
+            cartItems.add(cartItem);
+            CreateOrderActivity.ITEM_LIST.setValue(cartItems);
+            CreateOrderActivity.TYPE_ORDER.setValue(Constants.TYPE_ORDER_BUY_NOW);
+            startActivity(new Intent(this, CreateOrderActivity.class));
+            getListAddressForCreateOrder(Constants.SIZE_ITEM);
+
+        } else {
+            viewModel.showNormalMessage("Please select flavor!");
+        }
+
 
     }
 
@@ -237,7 +271,29 @@ public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBin
         }
 
     }
+    public void getListAddressForCreateOrder(int size) {
+        viewModel.getListAddresses(new MainCalback<ResponseListObj<AddressResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+                viewModel.hideLoading();
+            }
 
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<AddressResponse> object) {
+                CreateOrderActivity.IS_EMPTY_ADDRESS.setValue(object.getContent().isEmpty());
+                CreateOrderActivity.ADDRESS_LIST.setValue(object.getContent());
+            }
+            @Override
+            public void doFail() {
+
+            }
+        }, size);
+    }
     public void onBuyNowClick() {
         if (isLogin()) {
             TYPE_HANDLE = R.string.buy_now;

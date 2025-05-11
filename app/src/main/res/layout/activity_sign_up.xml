@@ -15,7 +15,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <LinearLayout
             android:id="@+id/l_header"
@@ -165,7 +166,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
-                android:background="@drawable/background_button_login_radius_25"
+                android:background="@color/text"
                 android:text="@string/signUp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp"

@@ -19,4 +19,11 @@ public class ProductResponse {
     private List<String> images;
     private Long totalSold;
     private ReviewStatsResponse reviewStats;
+    public Double getPriceOfProduct() {
+        if (discount == null) {
+            return price;
+        } else {
+            return price * (1 - discount.getDiscountPercentage() / 100.0);
+        }
+    }
 }

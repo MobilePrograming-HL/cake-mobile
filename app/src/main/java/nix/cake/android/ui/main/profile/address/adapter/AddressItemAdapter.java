@@ -77,18 +77,17 @@ public class AddressItemAdapter extends RecyclerView.Adapter<AddressItemAdapter.
         holder.binding.lCheck.setOnClickListener(v -> {
             if (listener != null) {
                 for (int i = 0; i < data.size(); i++) {
-                    data.get(i).setIsDefault("false");
+                    data.get(i).setIsDefault(false);
                 }
-                address.setIsDefault("true");
+                address.setIsDefault(true);
                 notifyDataSetChanged();
-
                 listener.onDefaultClick(address, holder.getAdapterPosition());
             }
         });
     }
 
     private void updateDefaultUI(AddressItemViewHolder holder, AddressResponse address) {
-        if (Objects.equals(address.getIsDefault(), "true")) {
+        if (address.getIsDefault()) {
             holder.binding.checkDefault.setImageResource(R.drawable.checked);
             holder.binding.tvDefault.setText(R.string.default_address);
         } else {
@@ -140,6 +139,9 @@ public class AddressItemAdapter extends RecyclerView.Adapter<AddressItemAdapter.
             notifyItemRemoved(position);
             notifyDataSetChanged();
         }
+    }
+    public Boolean isEmptyData() {
+        return data.isEmpty();
     }
     public static class AddressItemViewHolder extends RecyclerView.ViewHolder {
         ItemAddressBinding binding;

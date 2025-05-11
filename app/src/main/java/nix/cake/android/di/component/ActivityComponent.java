@@ -5,6 +5,8 @@ import nix.cake.android.di.scope.ActivityScope;
 import nix.cake.android.ui.main.MainActivity;
 
 import dagger.Component;
+import nix.cake.android.ui.main.cart.order.CreateOrderActivity;
+import nix.cake.android.ui.main.cart.order.OrderSuccessActivity;
 import nix.cake.android.ui.main.login.LoginActivity;
 import nix.cake.android.ui.main.login.SignUpActivity;
 import nix.cake.android.ui.main.login.VerifyOtpActivity;
@@ -30,5 +32,7 @@ public interface ActivityComponent {
     void inject(ProductDetailActivity activity);
     void inject(VerifyOtpActivity activity);
     void inject(FindProductActivity activity);
+    void inject(CreateOrderActivity activity);
+    void inject(OrderSuccessActivity activity);
 }
 

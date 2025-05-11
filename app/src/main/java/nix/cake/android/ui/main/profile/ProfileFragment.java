@@ -19,7 +19,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding, Profil
         ((MainActivity) requireActivity()).getMyOrders();
     }
     public void onShippingAddressClick() {
-        ((MainActivity) requireActivity()).getListAddress(Constants.PAGE_START);
+        ((MainActivity) requireActivity()).getListAddress(Constants.SIZE_ITEM);
     }
     public void onSignOutClick() {
         ((MainActivity) requireActivity()).logout();

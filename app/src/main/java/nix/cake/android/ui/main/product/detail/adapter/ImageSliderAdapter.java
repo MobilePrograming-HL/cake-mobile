@@ -37,8 +37,8 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         Glide.with(context)
                 .load(imageList.get(position))
-                .placeholder(R.drawable.cake_default)
-                .error(R.drawable.cake_default)
+                .placeholder(R.color.img_default)
+                .error(R.color.img_default)
                 .into(holder.imageView);
     }
 

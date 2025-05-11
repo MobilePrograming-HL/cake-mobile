@@ -9,6 +9,7 @@ public class CategoryResponse {
     private String name;
     private String description;
     private String image;
+    private Boolean isSelected = false;
 
     public CategoryResponse(String id, String name, String description, String image) {
         this.id = id;

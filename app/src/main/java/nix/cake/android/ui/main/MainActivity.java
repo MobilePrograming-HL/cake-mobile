@@ -2,8 +2,6 @@ package nix.cake.android.ui.main;
 
 //import static android.os.Build.VERSION_CODES.R;
 
-import static com.google.android.material.internal.ContextUtils.getActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -17,6 +15,7 @@ import java.util.List;
 
 import nix.cake.android.BR;
 import nix.cake.android.R;
+import nix.cake.android.constant.Constants;
 import nix.cake.android.data.model.api.ResponseListObj;
 import nix.cake.android.data.model.api.request.cart.UpdateCartItemRequest;
 import nix.cake.android.data.model.api.response.cart.CartItemResponse;
@@ -24,14 +23,17 @@ import nix.cake.android.data.model.api.response.cart.CartResponse;
 import nix.cake.android.data.model.api.response.product.CategoryResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
+import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import nix.cake.android.databinding.ActivityMainBinding;
 import nix.cake.android.di.component.ActivityComponent;
 import nix.cake.android.ui.base.activity.BaseActivity;
 import nix.cake.android.ui.main.cart.CartFragment;
+import nix.cake.android.ui.main.cart.order.CreateOrderActivity;
 import nix.cake.android.ui.main.home.HomeFragment;
 import nix.cake.android.ui.main.login.LoginActivity;
 import nix.cake.android.ui.main.login.UnLoginFragment;
 import nix.cake.android.ui.main.product.detail.ProductDetailActivity;
+import nix.cake.android.ui.main.product.find.FindProductActivity;
 import nix.cake.android.ui.main.product.find.FindProductFragment;
 import nix.cake.android.ui.main.profile.ProfileFragment;
 import nix.cake.android.ui.main.profile.address.ShippingAddressActivity;
@@ -49,7 +51,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     private FindProductFragment findProductFragment;
     private FragmentManager fm;
     private static final String HOME = "HOME";
-    private static final String SHOP = "SHOP";
+    public static final String SHOP = "SHOP";
     private static final String CART = "CART";
     private static final String PROFILE = "PROFILE";
     private static final String UNLOGIN = "UNLOGIN";
@@ -64,7 +66,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
         viewBinding.setA(this);
         viewBinding.setVm(viewModel);
-
+        getListCategoriesForHome();
         fm = getSupportFragmentManager();
         homeFragment = new HomeFragment();
         active = homeFragment;
@@ -87,18 +89,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     return true;
                 case R.id.cart:
                     if (isLogin()) {
-                        if (cartFragment == null){
-                            getCart();
-                            cartFragment = new CartFragment();
-                            fm.beginTransaction().add(R.id.nav_host_fragment, cartFragment, CART).hide(active).commit();
-                        } else {
-                            getCart();
-                            fm.beginTransaction().hide(active).show(cartFragment).commit();
-                        }
+                        getCart();
+                        cartFragment = new CartFragment();
+                        fm.beginTransaction().add(R.id.nav_host_fragment, cartFragment, CART).hide(active).commit();
                         active = cartFragment;
                         return true;
                     } else {
                         if (unLoginFragment == null) {
+                            getListProductForUnLogin(null, "", "asc");
                             unLoginFragment = new UnLoginFragment();
                             fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
                         } else {
@@ -119,6 +117,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         return true;
                     } else {
                         if (unLoginFragment == null) {
+                            getListProductForUnLogin(null, "", "asc");
                             unLoginFragment = new UnLoginFragment();
                             fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
                         } else {
@@ -143,16 +142,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     public void navigateToCurrentFragment() {
         switch (currentFragment) {
             case R.id.cart:
-                if (cartFragment == null){
+                if (isLogin()) {
                     getCart();
                     cartFragment = new CartFragment();
                     fm.beginTransaction().add(R.id.nav_host_fragment, cartFragment, CART).hide(active).commit();
+                    active = cartFragment;
+                    break;
                 } else {
-                    getCart();
-                    fm.beginTransaction().hide(active).show(cartFragment).commit();
+                    if (unLoginFragment == null) {
+                        getListProductForUnLogin(null, "", "asc");
+                        unLoginFragment = new UnLoginFragment();
+                        fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
+                    } else {
+                        fm.beginTransaction().hide(active).show(unLoginFragment).commit();
+                    }
+                    active = unLoginFragment;
+                    break;
                 }
-                active = cartFragment;
-                break;
+
             case R.id.profile:
                 if (isLogin()) {
                     if (profileFragment == null) {
@@ -165,6 +172,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     break;
                 } else {
                     if (unLoginFragment == null) {
+                        getListProductForUnLogin(null, "", "asc");
                         unLoginFragment = new UnLoginFragment();
                         fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
                     } else {
@@ -200,6 +208,27 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
     public void getMyOrders() {
         navigateToMyOrders();
+        viewModel.getListOrder(new MainCalback<ResponseListObj<OrderResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+            @Override
+            public void doSuccess(ResponseListObj<OrderResponse> object) {
+                MyOrdersActivity.IS_EMPTY.setValue(object.getContent().isEmpty());
+                MyOrdersActivity.ORDER_LIST.postValue(object.getContent());
+                getListProductForOrder(null, Constants.PAGE_START);
+            }
+            @Override
+            public void doFail() {
+
+            }
+        }, Constants.SIZE_ITEM);
     }
     public void navigateToMyOrders() {
         Intent it = new Intent(this, MyOrdersActivity.class);
@@ -261,6 +290,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             @Override
             public void doSuccess(ResponseListObj<CategoryResponse> object) {
                 ShopFragment.CATEGORIES_LIST.postValue(object.getContent());
+                FindProductFragment.CATEGORIES_LIST.postValue(object.getContent());
                 viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {
                     @Override
                     public void doError(Throwable error) {
@@ -281,7 +311,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     public void doSuccess(ResponseListObj<ProductResponse> object) {
                         ShopFragment.PRODUCT_LIST.setValue(object.getContent());
                     }
-                }, null, 0);
+                }, null, Constants.PAGE_START);
             }
         });
     }
@@ -348,7 +378,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         active = shopFragment;
         showBottomNav();
     }
-    public void getListAddress(int page) {
+    public void getListAddress(int size) {
+        navigateToShippingAddress();
         viewModel.getListAddresses(new MainCalback<ResponseListObj<AddressResponse>>() {
             @Override
             public void doError(Throwable error) {
@@ -362,21 +393,21 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
             @Override
             public void doSuccess(ResponseListObj<AddressResponse> object) {
+                ShippingAddressActivity.IS_EMPTY.setValue(object.getContent().isEmpty());
                 ShippingAddressActivity.updateAddressList(object.getContent());
-                navigateToShippingAddress();
             }
             @Override
             public void doFail() {
 
             }
-        }, page);
+        }, size);
     }
     public void navigateToShippingAddress() {
         Intent it = new Intent(this, ShippingAddressActivity.class);
         startActivity(it);
     }
-
     public void getCart() {
+        CartFragment.PRODUCT_LIST.setValue(new ArrayList<>());
         viewModel.getCart(new MainCalback<CartResponse>() {
             @Override
             public void doError(Throwable error) {
@@ -390,7 +421,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
             @Override
             public void doSuccess(CartResponse object) {
+                CartFragment.IS_EMPTY.setValue(object.getCartItems().isEmpty());
                 CartFragment.updateCartItemList(object);
+                CartFragment.currentPage = 0;
+                getListProductForCart(null, Constants.PAGE_START);
             }
             @Override
             public void doFail() {
@@ -398,7 +432,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             }
         });
     }
-
     public void updateCartItem(CartItemResponse item) {
         UpdateCartItemRequest updateCartItemRequest = new UpdateCartItemRequest();
 
@@ -406,5 +439,171 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         updateCartItemRequest.setQuantity(item.getQuantity());
 
         viewModel.updateCartItem(updateCartItemRequest);
+    }
+    public void deleteCartItem(CartItemResponse item) {
+        viewModel.deleteCartItem(item.getId());
+    }
+    public void getListProductForCart(String categoryId, Integer page) {
+        viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {}
+
+            @Override
+            public void doSuccess() {}
+
+            @Override
+            public void doFail() {}
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                List<ProductResponse> currentList = CartFragment.PRODUCT_LIST.getValue();
+                if (currentList == null) {
+                    currentList = new ArrayList<>();
+                }
+                currentList.addAll(object.getContent());
+                CartFragment.PRODUCT_LIST.setValue(currentList);
+            }
+        }, categoryId, page);
+    }
+    public void getListProductForOrder(String categoryId, Integer page) {
+        viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {}
+
+            @Override
+            public void doSuccess() {}
+
+            @Override
+            public void doFail() {}
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                List<ProductResponse> currentList = MyOrdersActivity.PRODUCT_LIST.getValue();
+                if (currentList == null) {
+                    currentList = new ArrayList<>();
+                }
+                currentList.addAll(object.getContent());
+                MyOrdersActivity.PRODUCT_LIST.setValue(currentList);
+            }
+        }, categoryId, page);
+    }
+
+    public void getListProductForSearch(String categoryId, String name, String sort) {
+        viewModel.searchProduct(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doFail() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                FindProductActivity.SEARCH_KEY.postValue(name);
+                FindProductActivity.PRODUCT_LIST.postValue(object.getContent());
+                FindProductActivity.CATE_ID.postValue(categoryId);
+            }
+        }, categoryId, Constants.SIZE_ITEM, name, sort);
+    }
+    public void getListCategoriesForSearch() {
+        viewModel.getListCategories(new MainCalback<ResponseListObj<CategoryResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doFail() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<CategoryResponse> object) {
+                FindProductActivity.CATEGORY_LIST.postValue(object.getContent());
+            }
+        });
+    }
+    public void getListCategoriesForHome() {
+        viewModel.getListCategories(new MainCalback<ResponseListObj<CategoryResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doFail() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<CategoryResponse> object) {
+                HomeFragment.CATEGORIES_LIST.postValue(object.getContent());
+            }
+        });
+    }
+    public void getListAddressForCreateOrder(int size) {
+        viewModel.getListAddresses(new MainCalback<ResponseListObj<AddressResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+                viewModel.hideLoading();
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<AddressResponse> object) {
+                CreateOrderActivity.IS_EMPTY_ADDRESS.setValue(object.getContent().isEmpty());
+                CreateOrderActivity.ADDRESS_LIST.setValue(object.getContent());
+            }
+            @Override
+            public void doFail() {
+
+            }
+        }, size);
+    }
+    public void getListProductForUnLogin(String categoryId, String name, String sort) {
+        viewModel.searchProduct(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doFail() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                UnLoginFragment.PRODUCT_LIST.setValue(new ArrayList<>());
+                UnLoginFragment.PRODUCT_LIST.postValue(object.getContent());
+            }
+        }, categoryId, Constants.SIZE_ITEM, name, sort);
     }
 }

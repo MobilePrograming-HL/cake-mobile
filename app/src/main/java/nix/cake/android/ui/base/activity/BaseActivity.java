@@ -1,5 +1,6 @@
 package nix.cake.android.ui.base.activity;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
@@ -12,9 +13,11 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
@@ -62,7 +65,8 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
     // Listen all action from local
     private BroadcastReceiver globalApplicationReceiver;
     private IntentFilter filterGlobalApplication;
-
+    public ValueAnimator fakeProgressAnimator;
+    public int currentProgress = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         performDependencyInjection(getBuildComponent());
@@ -88,11 +92,6 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 toastMessage.showMessage(getApplicationContext());
             }
         });
-        viewModel.progressBarMsg.observe(this, progressBarMsg ->{
-            if (progressBarMsg != null){
-                changeProgressBarMsg(progressBarMsg);
-            }
-        });
         filterGlobalApplication = new IntentFilter();
         filterGlobalApplication.addAction(Constants.ACTION_EXPIRED_TOKEN);
         globalApplicationReceiver = new BroadcastReceiver() {
@@ -109,7 +108,16 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
         };
         setupEditorActionListenerForAllEditTexts(viewBinding.getRoot());
     }
-
+    protected void startFakeLoading(ProgressBar progressBar) {
+        fakeProgressAnimator = ValueAnimator.ofInt(0, 90);
+        fakeProgressAnimator.setDuration(1000);
+        fakeProgressAnimator.setInterpolator(new LinearInterpolator());
+        fakeProgressAnimator.addUpdateListener(animation -> {
+            currentProgress = (int) animation.getAnimatedValue();
+            progressBar.setProgress(currentProgress);
+        });
+        fakeProgressAnimator.start();
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -225,13 +233,6 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
         progressDialog = DialogUtils.createDialogLoading(this, msg);
         progressDialog.show();
     }
-
-    public void changeProgressBarMsg(String msg){
-        if (progressDialog != null){
-            ((TextView)progressDialog.findViewById(R.id.progressbar_msg)).setText(msg);
-        }
-    }
-
     public void hideProgress() {
         if (progressDialog != null) {
             progressDialog.dismiss();

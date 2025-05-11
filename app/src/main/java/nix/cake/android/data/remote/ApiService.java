@@ -8,6 +8,8 @@ import nix.cake.android.data.model.api.request.cart.UpdateCartItemRequest;
 import nix.cake.android.data.model.api.request.login.ActiveAccountRequest;
 import nix.cake.android.data.model.api.request.login.LoginRequest;
 import nix.cake.android.data.model.api.request.login.SignUpRequest;
+import nix.cake.android.data.model.api.request.order.BuyNowOrderRequest;
+import nix.cake.android.data.model.api.request.order.CreateOrderRequest;
 import nix.cake.android.data.model.api.request.profile.AddressRequest;
 import nix.cake.android.data.model.api.response.cart.CartResponse;
 import nix.cake.android.data.model.api.response.login.LoginResponse;
@@ -15,6 +17,7 @@ import nix.cake.android.data.model.api.response.product.CategoryResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
 import nix.cake.android.data.model.api.response.profile.address.NationResponse;
+import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -44,11 +47,14 @@ public interface ApiService {
     Observable<ResponseWrapper<ResponseListObj<CategoryResponse>>> getListCategory();
 
     @GET("v1/product/list")
+    @Headers({"IgnoreAuth: 1"})
     Observable<ResponseWrapper<ResponseListObj<ProductResponse>>> getListProduct(
             @Query("categoryId") String categoryId,
+            @Query("size") Integer size,
             @Query("page") Integer page
     );
     @GET("v1/product/get/{id}")
+    @Headers({"IgnoreAuth: 1"})
     Observable<ResponseWrapper<ProductResponse>> getProductDetail(@Path("id") String id);
 
     @POST("v1/cart/add-item")
@@ -71,7 +77,7 @@ public interface ApiService {
 
     @GET("v1/address/list")
     Observable<ResponseWrapper<ResponseListObj<AddressResponse>>> getListAddress(
-            @Query("page") Integer page
+            @Query("size") Integer size
     );
 
     @PUT("v1/address/set-default/{id}")
@@ -91,4 +97,39 @@ public interface ApiService {
 
     @PUT("v1/cart-item/update")
     Observable<ResponseWrapper> updateCartItem(@Body UpdateCartItemRequest request);
+
+    @DELETE("v1/cart-item/delete/{id}")
+    Observable<ResponseWrapper> deleteCartItem(@Path("id") String id);
+
+    @GET("v1/order/list")
+    Observable<ResponseWrapper<ResponseListObj<OrderResponse>>> getListOrder(
+            @Query("size") Integer page,
+            @Query("status") Integer status
+
+    );
+    @GET("v1/order/get/{id}")
+    Observable<ResponseWrapper<OrderResponse>> getOrder(@Path("id") String id);
+    @POST("v1/order/create")
+    Observable<ResponseWrapper> createOrder(@Body CreateOrderRequest request);
+    @POST("v1/order/buy-now")
+    Observable<ResponseWrapper> buyNowOrder(@Body BuyNowOrderRequest request);
+    @GET("v1/product/list")
+    @Headers({"IgnoreAuth: 1"})
+    Observable<ResponseWrapper<ResponseListObj<ProductResponse>>> searchProduct(
+            @Query("categoryId") String categoryId,
+            @Query("size") Integer size,
+            @Query("name") String name,
+            @Query("priceSort") String priceSort
+    );
+
+    @GET("v1/product/list")
+    @Headers({"IgnoreAuth: 1"})
+    Observable<ResponseWrapper<ResponseListObj<ProductResponse>>> filterProduct(
+            @Query("categoryId") String categoryId,
+            @Query("size") Integer size,
+            @Query("name") String name,
+            @Query("formPrice") Double fromPrice,
+            @Query("toPrice") Double toPrice,
+            @Query("priceSort") String priceSort
+    );
 }

@@ -13,13 +13,5 @@ public class OrderDetailViewModel extends BaseViewModel {
 
     public OrderDetailViewModel(Repository repository, MVVMApplication application) {
         super(repository, application);
-        initSampleOrders();
-    }
-    private void initSampleOrders() {
-        ordersList = new ArrayList<>();
-
-        ordersList.add(new OrderResponse(1L, 2, 150000.0, "2025-03-01", "Delivered"));
-        ordersList.add(new OrderResponse(2L, 1, 75000.0, "2025-03-02", "Waiting"));
-        ordersList.add(new OrderResponse(3L, 3, 225000.0, "2025-03-03", "Processing"));
     }
 }
