@@ -10,4 +10,12 @@ public class OrderItemResponse {
     private Double price;
     private Integer discountPercentage;
     private Double totalPrice;
+
+    public Double getPriceOfProduct() {
+        if (discountPercentage == 0) {
+            return price;
+        } else {
+            return price * (1 - discountPercentage / 100.0);
+        }
+    }
 }

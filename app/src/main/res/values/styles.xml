@@ -2,13 +2,14 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.Bridge">
-        <!-- Customize your theme here. -->
+         Customize your theme here.
         <item name="fontFamily">@font/application_font</item>
         <item name="android:fontFamily">@font/application_font</item>
         <item name="windowActionBar">false</item>
         <!-- navigation icon color -->
         <item name="colorControlNormal">@color/white</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
     <style name="roundImg">
         <item name="cornerFamily">rounded</item>
@@ -50,6 +51,12 @@
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:background">@android:color/transparent</item>
+    </style>
+    <!-- res/values/themes.xml -->
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
 </resources>

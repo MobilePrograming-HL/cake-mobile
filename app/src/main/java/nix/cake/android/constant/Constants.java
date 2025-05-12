@@ -30,7 +30,8 @@ public class Constants {
     public static final int ORDER_STATUS_CANCELED = 5;
     public static final String STANDARD_SHIPPING = "Standard Shipping";
     public static final String FAST_SHIPPING = "Fast Shipping";
-
+    public static final String ASC = "asc";
+    public static final String DESC = "desc";
     public static final int TYPE_ORDER_BUY_NOW = 1;
     public static final int TYPE_ORDER_OTHER = 2;
     private Constants(){

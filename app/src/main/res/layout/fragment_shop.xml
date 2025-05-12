@@ -84,29 +84,7 @@
                                 android:background="@drawable/background_nav_filter"
                                 android:layout_margin="@dimen/_12sdp">
 
-                                <LinearLayout
-                                    android:id="@+id/filter"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginEnd="@dimen/_24sdp">
 
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/ic_filter"
-                                        android:layout_marginEnd="@dimen/_12sdp"/>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/filter"
-                                        android:textSize="@dimen/_12ssp"
-                                        android:textColor="@color/text"
-                                        android:fontFamily="@font/roboto_500"
-                                        android:textStyle="bold"/>
-                                </LinearLayout>
 
                                 <LinearLayout
                                     android:id="@+id/sort"
@@ -114,7 +92,6 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
                                     android:layout_centerVertical="true"
-                                    android:layout_toEndOf="@+id/filter"
                                     android:onClick="@{v -> f.onSortByClick()}">
 
                                     <ImageView
@@ -124,9 +101,10 @@
                                         android:layout_marginEnd="@dimen/_12sdp"/>
 
                                     <TextView
+                                        android:id="@+id/sort_by_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Price: lowest to highest"
+                                        android:text="@string/price_lowest_to_highest"
                                         android:textSize="@dimen/_12ssp"
                                         android:textColor="@color/text"
                                         android:fontFamily="@font/roboto_500"

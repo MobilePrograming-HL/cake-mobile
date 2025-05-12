@@ -32,6 +32,30 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/roboto_500"/>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/order_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status_delivered"
+                    android:textSize="@dimen/_9ssp"
+                    android:textColor="@color/text"
+                    android:fontFamily="@font/roboto_500"/>
+                <TextView
+                    android:id="@+id/order_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status_delivered"
+                    android:textSize="@dimen/_9ssp"
+                    android:textColor="@color/text_second"
+                    android:fontFamily="@font/roboto_500"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

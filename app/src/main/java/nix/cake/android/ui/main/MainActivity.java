@@ -22,6 +22,7 @@ import nix.cake.android.data.model.api.response.cart.CartItemResponse;
 import nix.cake.android.data.model.api.response.cart.CartResponse;
 import nix.cake.android.data.model.api.response.product.CategoryResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
+import nix.cake.android.data.model.api.response.profile.CustomerResponse;
 import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
 import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import nix.cake.android.databinding.ActivityMainBinding;
@@ -56,8 +57,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     private static final String PROFILE = "PROFILE";
     private static final String UNLOGIN = "UNLOGIN";
     private static final String SEARCH = "SEARCH";
-
-
     private Integer currentFragment = 0;
 
     @Override
@@ -66,7 +65,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
         viewBinding.setA(this);
         viewBinding.setVm(viewModel);
-        getListCategoriesForHome();
+        getProfile();
         fm = getSupportFragmentManager();
         homeFragment = new HomeFragment();
         active = homeFragment;
@@ -137,6 +136,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     protected void onResume() {
         super.onResume();
         navigateToCurrentFragment();
+        getProfile();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public void navigateToCurrentFragment() {
@@ -163,6 +168,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             case R.id.profile:
                 if (isLogin()) {
                     if (profileFragment == null) {
+                        getProfile();
                         profileFragment = new ProfileFragment();
                         fm.beginTransaction().add(R.id.nav_host_fragment, profileFragment, PROFILE).hide(active).commit();
                     } else {
@@ -239,27 +245,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         startActivity(it);
     }
     public void logout() {
-//        viewModel.logout(new MainCalback<String>() {
-//            @Override
-//            public void doError(Throwable error) {
-//
-//            }
-//
-//            @Override
-//            public void doSuccess() {
-//
-//            }
-//
-//            @Override
-//            public void doFail() {
-//
-//            }
-//
-//            @Override
-//            public void doSuccess(String object) {
-//                navigateToLogin();
-//            }
-//        });
         viewModel.showLoading();
         viewModel.getRepository().getSharedPreferences().setToken("");
         navigateToLogin();
@@ -336,6 +321,29 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 ShopFragment.PRODUCT_LIST.setValue(currentList);
             }
         }, categoryId, page);
+    }
+
+    public void getListProductSortForShop(String categoryId, String createdSort, String soldSort, String priceSort) {
+        viewModel.getProductSortForShop(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {}
+
+            @Override
+            public void doSuccess() {}
+
+            @Override
+            public void doFail() {}
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                List<ProductResponse> currentList = ShopFragment.PRODUCT_LIST.getValue();
+                if (currentList == null) {
+                    currentList = new ArrayList<>();
+                }
+                currentList.addAll(object.getContent());
+                ShopFragment.PRODUCT_LIST.setValue(currentList);
+            }
+        },Constants.SIZE_ITEM, categoryId, createdSort, soldSort, priceSort);
     }
     public void getProductDetail(String id) {
         viewModel.getProductDetail(new MainCalback<ProductResponse>() {
@@ -605,5 +613,54 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 UnLoginFragment.PRODUCT_LIST.postValue(object.getContent());
             }
         }, categoryId, Constants.SIZE_ITEM, name, sort);
+    }
+
+    public void getListProductForHome(String createSort, String soldSort) {
+        viewModel.getProductForHome(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doFail() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                HomeFragment.PRODUCT_LIST.setValue(object.getContent());
+
+            }
+        },Constants.SIZE_ITEM, createSort, soldSort);
+    }
+    public void getProfile() {
+        viewModel.getProfile(new MainCalback<CustomerResponse>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doFail() {
+
+            }
+
+            @Override
+            public void doSuccess(CustomerResponse object) {
+                ProfileFragment.CUSTOMER = new MutableLiveData<>();
+                ProfileFragment.CUSTOMER.setValue(object);
+            }
+        });
     }
 }

@@ -44,6 +44,7 @@ public class OrderDetailActivity extends BaseActivity<ActivityOrderDetailBinding
                 viewBinding.total.setText(DisplayUtils.convertDoubleTwoDecimalsHasCurrency(order.getTotalAmount()));
 
                 viewBinding.shippingMethod.setText(order.getTypeShipping());
+                viewBinding.orderTime.setText(DisplayUtils.formatIsoToLocal(order.getCreatedAt()));
             }
         });
 

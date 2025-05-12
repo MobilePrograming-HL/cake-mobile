@@ -29,6 +29,7 @@ import java.util.Objects;
 
 import eu.davidea.flexibleadapter.databinding.BR;
 import nix.cake.android.R;
+import nix.cake.android.constant.Constants;
 import nix.cake.android.data.model.api.response.product.CategoryResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.databinding.FragmentShopBinding;
@@ -46,15 +47,16 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
     private ProductItemAdapter productAdapter;
     private BottomSheetBehavior sheetBehavior;
     private ArrayAdapter<String> sortAdapter;
-    private int selectedPosition = 3;
+    private int selectedPosition = 2;
     private boolean isLoading = false;
+    private boolean isSort = false;
+
     private int currentPage = 0;
-    private String selectedCategoryId;
+    private String selectedCategoryId = "";
     private Handler handler = new Handler(Looper.getMainLooper());
     private String[] sortOptions = {
             "Popular",
             "Newest",
-            "Customer Review",
             "Price: Lowest to Highest",
             "Price: Highest to Lowest"
     };
@@ -91,6 +93,7 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
     }
     @Override
     public void onItemClick(CategoryResponse category) {
+        isSort = false;
         selectedCategoryId = category.getId();
         currentPage = 0;
         PRODUCT_LIST.setValue(new ArrayList<>());
@@ -120,10 +123,12 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
         });
     }
     private void loadMoreData() {
-        if (isLoading) return;
-        isLoading = true;
-        currentPage++;
-        ((MainActivity) requireActivity()).getListProduct(selectedCategoryId, currentPage);
+        if (!isSort) {
+            if (isLoading) return;
+            isLoading = true;
+            currentPage++;
+            ((MainActivity) requireActivity()).getListProduct(selectedCategoryId, currentPage);
+        }
     }
     public void setUpAdapterCategory() {
         adapter = new CategoryTagItemAdapter(this);
@@ -158,24 +163,28 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
         binding.sortList.setAdapter(sortAdapter);
 
         binding.sortList.setOnItemClickListener((parent, view, position, id) -> {
+            isSort = true;
             selectedPosition = position;
-
-            String selectedOption = sortOptions[position];
+            currentPage = 0;
+            PRODUCT_LIST.setValue(new ArrayList<>());
+            binding.progress.progress.setVisibility(View.VISIBLE);
             switch (position) {
                 case 0: // Popular
-                    // Xử lý sort theo popular
+                    binding.sortByText.setText(R.string.popular);
+                    ((MainActivity) requireActivity()).getListProductSortForShop(selectedCategoryId, "", Constants.DESC, "");
                     break;
                 case 1: // Newest
-                    // Xử lý sort theo newest
+                    binding.sortByText.setText(R.string.newest);
+                    ((MainActivity) requireActivity()).getListProductSortForShop(selectedCategoryId, Constants.DESC,"", "");
+
                     break;
-                case 2: // Customer Review
-                    // Xử lý sort theo review
+                case 2: // Price: Lowest to Highest
+                    binding.sortByText.setText(R.string.price_lowest_to_highest);
+                    ((MainActivity) requireActivity()).getListProductSortForShop(selectedCategoryId, "", "", Constants.ASC);
                     break;
-                case 3: // Price: Lowest to Highest
-                    // Xử lý sort giá thấp đến cao
-                    break;
-                case 4: // Price: Highest to Lowest
-                    // Xử lý sort giá cao đến thấp
+                case 3: // Price: Highest to Lowest
+                    binding.sortByText.setText(R.string.price_highest_to_lowest);
+                    ((MainActivity) requireActivity()).getListProductSortForShop(selectedCategoryId, "", "", Constants.DESC);
                     break;
             }
             sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);

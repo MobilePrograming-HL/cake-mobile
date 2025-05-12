@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">cake</string>
+    <string name="app_name">Mee oii</string>
     <string name="msg_loading">Please wait ...</string>
 
     <!--Network error-->
@@ -117,6 +117,8 @@
     <string name="default_address">Default</string>
     <string name="set_as_default_address">Set as default address</string>
     <string name="are_you_sure_to_delete_this_item">Are you sure to delete this item?</string>
+    <string name="are_you_sure_to_cancel_this_order">Are you sure to cancel this order?</string>
+
     <string name="you_might_like_to_fill_it_with">You Might Like to Fill it With</string>
     <string name="your_cart_is_empty">Your cart is empty</string>
     <string name="your_order_is_empty">Your order is empty</string>
@@ -157,5 +159,6 @@
     <string name="you_are_not_log_in_click_here">You are not log in, click here.</string>
     <string name="mgs_order_success">Your order will be delivery soon. \n Thank for your choosing our app!</string>
     <string name="mgs_order_success_2">Success!</string>
-
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

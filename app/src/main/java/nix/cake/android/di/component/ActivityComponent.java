@@ -17,6 +17,7 @@ import nix.cake.android.ui.main.profile.address.ShippingAddressActivity;
 import nix.cake.android.ui.main.profile.address.detail.AddressDetailActivity;
 import nix.cake.android.ui.main.profile.order.MyOrdersActivity;
 import nix.cake.android.ui.main.profile.order.detail.OrderDetailActivity;
+import nix.cake.android.ui.main.splash.SplashActivity;
 
 @ActivityScope
 @Component(modules = {ActivityModule.class}, dependencies = AppComponent.class)
@@ -34,5 +35,6 @@ public interface ActivityComponent {
     void inject(FindProductActivity activity);
     void inject(CreateOrderActivity activity);
     void inject(OrderSuccessActivity activity);
+    void inject(SplashActivity activity);
 }
 

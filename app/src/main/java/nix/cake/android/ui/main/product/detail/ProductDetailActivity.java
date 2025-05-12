@@ -70,7 +70,7 @@ public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBin
 
         imageSliderAdapter = new ImageSliderAdapter(this, viewModel.productDetail.getImages());
         viewBinding.img.setAdapter(imageSliderAdapter);
-
+        viewBinding.setSold(viewModel.productDetail.getTotalSold().toString());
         viewBinding.img.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {

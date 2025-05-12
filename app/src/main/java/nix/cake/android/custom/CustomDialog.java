@@ -14,6 +14,9 @@ public class CustomDialog {
     private Dialog dialog;
     private Context context;
     private String title;
+    private String deleteText;
+    private String cancelText;
+
     private OnDialogClickListener listener;
 
     public interface OnDialogClickListener {
@@ -33,6 +36,15 @@ public class CustomDialog {
 
     public CustomDialog setOnClickListener(OnDialogClickListener listener) {
         this.listener = listener;
+        return this;
+    }
+    public CustomDialog setDeleteText(String text) {
+        this.deleteText = text;
+        return this;
+    }
+
+    public CustomDialog setCancelText(String text) {
+        this.cancelText = text;
         return this;
     }
 
@@ -55,6 +67,12 @@ public class CustomDialog {
 
         if (title != null) {
             tvTitle.setText(title);
+        }
+        if (deleteText != null) {
+            btnDelete.setText(deleteText);
+        }
+        if (cancelText != null) {
+            btnCancel.setText(cancelText);
         }
 
         btnDelete.setOnClickListener(v -> {
