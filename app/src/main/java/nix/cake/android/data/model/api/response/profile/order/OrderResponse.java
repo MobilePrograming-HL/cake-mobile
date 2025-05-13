@@ -19,7 +19,7 @@ public class OrderResponse {
     private String note;
     private AddressResponse address;
     private String createdAt;
-
+    private FiservCreateCheckoutResponse fiservInfo;
 
     public String getTypeShipping() {
         if (shippingFee == 25000) {

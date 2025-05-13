@@ -1,5 +1,6 @@
 package nix.cake.android.ui.main.cart.order;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -17,6 +18,15 @@ public class OrderSuccessActivity extends BaseActivity<ActivityOrderSuccessBindi
         super.onCreate(savedInstanceState);
         viewBinding.setA(this);
         viewBinding.setVm(viewModel);
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            String path = uri.getPath(); // "/success" hoặc "/fail"
+            String orderId = uri.getQueryParameter("orderId");
+
+//            if ("/success".equals(path)) {
+//            } else if ("/fail".equals(path)) {
+//            }
+        }
     }
     public void goToShopNow() {
         this.finish();

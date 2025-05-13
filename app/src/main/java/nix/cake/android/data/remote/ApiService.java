@@ -111,9 +111,9 @@ public interface ApiService {
     @GET("v1/order/get/{id}")
     Observable<ResponseWrapper<OrderResponse>> getOrder(@Path("id") String id);
     @POST("v1/order/create")
-    Observable<ResponseWrapper> createOrder(@Body CreateOrderRequest request);
+    Observable<ResponseWrapper<OrderResponse>> createOrder(@Body CreateOrderRequest request);
     @POST("v1/order/buy-now")
-    Observable<ResponseWrapper> buyNowOrder(@Body BuyNowOrderRequest request);
+    Observable<ResponseWrapper<OrderResponse>> buyNowOrder(@Body BuyNowOrderRequest request);
     @GET("v1/product/list")
     @Headers({"IgnoreAuth: 1"})
     Observable<ResponseWrapper<ResponseListObj<ProductResponse>>> searchProduct(

@@ -83,8 +83,33 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name="nix.cake.android.ui.main.login.VerifyOtpActivity"/>
         <activity android:name="nix.cake.android.ui.main.product.find.FindProductActivity"/>
-        <activity android:name="nix.cake.android.ui.main.cart.order.CreateOrderActivity"/>
-        <activity android:name="nix.cake.android.ui.main.cart.order.OrderSuccessActivity"/>
+        <activity android:name=".ui.main.cart.order.CreateOrderActivity"/>
+        <activity
+            android:name=".ui.main.cart.order.OrderSuccessActivity"
+            android:exported="true">
+
+            <!-- SUCCESS redirect -->
+            <intent-filter android:label="fiserv_redirect">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="myapp"
+                    android:host="payment-result"
+                    android:pathPrefix="/success" />
+            </intent-filter>
+
+            <!-- FAIL redirect -->
+            <intent-filter android:label="fiserv_redirect_fail">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="myapp"
+                    android:host="payment-result"
+                    android:pathPrefix="/fail" />
+            </intent-filter>
+        </activity>
+
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -515,9 +515,34 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
             @Override
             public void doSuccess(ResponseListObj<ProductResponse> object) {
-                FindProductActivity.SEARCH_KEY.postValue(name);
-                FindProductActivity.PRODUCT_LIST.postValue(object.getContent());
-                FindProductActivity.CATE_ID.postValue(categoryId);
+                if (object.getContent() == null || object.getContent().isEmpty()) {
+                    viewModel.getListProduct(new MainCalback<ResponseListObj<ProductResponse>>() {
+                        @Override
+                        public void doError(Throwable error) {
+
+                        }
+
+                        @Override
+                        public void doSuccess() {
+
+                        }
+                        @Override
+                        public void doSuccess(ResponseListObj<ProductResponse> object) {
+                            FindProductActivity.SEARCH_KEY.postValue(name);
+                            FindProductActivity.PRODUCT_LIST.postValue(object.getContent());
+                            FindProductActivity.CATE_ID.postValue(categoryId);
+                        }
+                        @Override
+                        public void doFail() {
+
+                        }
+                    }, null, Constants.SIZE_ITEM, Constants.PAGE_START);
+                } else {
+                    FindProductActivity.SEARCH_KEY.postValue(name);
+                    FindProductActivity.PRODUCT_LIST.postValue(object.getContent());
+                    FindProductActivity.CATE_ID.postValue(categoryId);
+                }
+
             }
         }, categoryId, Constants.SIZE_ITEM, name, sort);
     }

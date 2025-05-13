@@ -26,6 +26,8 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     public interface OnItemClickListener {
         void onItemClick(OrderResponse order);
         void onCancelClick(OrderResponse order, int position);
+        void onPaymentClick(OrderResponse order, int position);
+
     }
     public OrderItemAdapter() {
         this.data = new ArrayList<>();
@@ -70,6 +72,17 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             });
         } else {
             holder.binding.cancel.setVisibility(View.GONE);
+        }
+
+        if (order.getStatus().getStatus() == 1) {
+            holder.binding.payment.setVisibility(View.VISIBLE);
+            holder.binding.payment.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onPaymentClick(order, position);
+                }
+            });
+        } else {
+            holder.binding.payment.setVisibility(View.GONE);
         }
 
         if (order.getStatus().getStatus() == 3) {

@@ -8,12 +8,14 @@ import androidx.lifecycle.MutableLiveData;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import nix.cake.android.MVVMApplication;
+import nix.cake.android.constant.Constants;
 import nix.cake.android.data.Repository;
 import nix.cake.android.data.model.api.ResponseListObj;
 import nix.cake.android.data.model.api.request.order.BuyNowOrderRequest;
 import nix.cake.android.data.model.api.request.order.CreateOrderRequest;
 import nix.cake.android.data.model.api.request.profile.AddressRequest;
 import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
+import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import nix.cake.android.ui.base.activity.BaseViewModel;
 import nix.cake.android.ui.main.MainCalback;
 import nix.cake.android.utils.DisplayUtils;
@@ -30,6 +32,7 @@ public class CreateOrderViewModel extends BaseViewModel {
     public MutableLiveData<Double> shipping_fee = new MutableLiveData<>(25000.0);
     CreateOrderRequest createOrderRequest = new CreateOrderRequest();
     BuyNowOrderRequest buyNowOrderRequest = new BuyNowOrderRequest();
+    public MutableLiveData<Integer> paymentMethod = new MutableLiveData<>(Constants.COD);
     public CreateOrderViewModel(Repository repository, MVVMApplication application) {
         super(repository, application);
     }
@@ -51,7 +54,7 @@ public class CreateOrderViewModel extends BaseViewModel {
                 )
         );
     }
-    public void createOrder(CreateOrderRequest request) {
+    public void createOrder(MainCalback<OrderResponse> callback, CreateOrderRequest request) {
         showLoading();
         compositeDisposable.add(repository.getApiService().createOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -59,18 +62,14 @@ public class CreateOrderViewModel extends BaseViewModel {
                 .subscribe(
                         response -> {
                             hideLoading();
-                            Intent it = new Intent(application.getApplicationContext(), OrderSuccessActivity.class);
-                            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // cần nếu gọi từ Application
-                            application.getApplicationContext().startActivity(it);
-
-                            application.getCurrentActivity().finish();
+                            callback.doSuccess(response.getData());
                         }, throwable -> {
                             hideLoading();
                             Timber.e(throwable);
                         }));
     }
 
-    public void buyNowOrder(BuyNowOrderRequest request) {
+    public void buyNowOrder(MainCalback<OrderResponse> callback, BuyNowOrderRequest request) {
         showLoading();
         compositeDisposable.add(repository.getApiService().buyNowOrder(request)
                 .subscribeOn(Schedulers.io())
@@ -78,11 +77,7 @@ public class CreateOrderViewModel extends BaseViewModel {
                 .subscribe(
                         response -> {
                             hideLoading();
-                            Intent it = new Intent(application.getApplicationContext(), OrderSuccessActivity.class);
-                            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // cần nếu gọi từ Application
-                            application.getApplicationContext().startActivity(it);
-
-                            application.getCurrentActivity().finish();
+                            callback.doSuccess(response.getData());
 
                         }, throwable -> {
                             hideLoading();

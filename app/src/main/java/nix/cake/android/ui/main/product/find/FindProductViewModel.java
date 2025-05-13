@@ -85,4 +85,23 @@ public class FindProductViewModel extends BaseViewModel {
                 )
         );
     }
+
+    public void getListProduct(MainCalback<ResponseListObj<ProductResponse>> callback, String categoryId, Integer size, Integer page) {
+        compositeDisposable.add(repository.getApiService().getListProduct(categoryId, size, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
 }

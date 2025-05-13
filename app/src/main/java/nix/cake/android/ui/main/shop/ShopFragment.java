@@ -36,14 +36,15 @@ import nix.cake.android.databinding.FragmentShopBinding;
 import nix.cake.android.di.component.FragmentComponent;
 import nix.cake.android.ui.base.fragment.BaseFragment;
 import nix.cake.android.ui.main.MainActivity;
+import nix.cake.android.ui.main.home.adapter.ItemCategoryHomeAdapter;
 import nix.cake.android.ui.main.product.adapter.ProductItemAdapter;
 import nix.cake.android.ui.main.product.find.FindProductActivity;
 import nix.cake.android.ui.main.shop.adapter.CategoryTagItemAdapter;
 
-public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewModel> implements CategoryTagItemAdapter.OnItemClickListener, ProductItemAdapter.OnItemClickListener {
+public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewModel> implements ItemCategoryHomeAdapter.OnItemClickListener, ProductItemAdapter.OnItemClickListener {
     public static MutableLiveData<List<CategoryResponse>> CATEGORIES_LIST = new MutableLiveData<>();
     public static MutableLiveData<List<ProductResponse>> PRODUCT_LIST = new MutableLiveData<>();
-    private CategoryTagItemAdapter adapter;
+    private ItemCategoryHomeAdapter categoryAdapter;
     private ProductItemAdapter productAdapter;
     private BottomSheetBehavior sheetBehavior;
     private ArrayAdapter<String> sortAdapter;
@@ -87,18 +88,9 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
         CATEGORIES_LIST.observe(this, categories -> {
             if (productAdapter != null) {
                 binding.progressCate.progressBar.setVisibility(View.INVISIBLE);
-                adapter.setData(categories);
+                categoryAdapter.setData(categories);
             }
         });
-    }
-    @Override
-    public void onItemClick(CategoryResponse category) {
-        isSort = false;
-        selectedCategoryId = category.getId();
-        currentPage = 0;
-        PRODUCT_LIST.setValue(new ArrayList<>());
-        binding.progress.progress.setVisibility(View.VISIBLE);
-        ((MainActivity) requireActivity()).getListProduct(selectedCategoryId, currentPage);
     }
     public void setUpAdapterProduct() {
         productAdapter = new ProductItemAdapter(this);
@@ -131,9 +123,9 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
         }
     }
     public void setUpAdapterCategory() {
-        adapter = new CategoryTagItemAdapter(this);
+        categoryAdapter = new ItemCategoryHomeAdapter(this);
         binding.rvCategory.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.rvCategory.setAdapter(adapter);
+        binding.rvCategory.setAdapter(categoryAdapter);
     }
     public void setUpBottomSheet() {
         sheetBehavior = BottomSheetBehavior.from(binding.menuSort);
@@ -238,5 +230,15 @@ public class ShopFragment extends BaseFragment<FragmentShopBinding, ShopViewMode
     @Override
     public void onItemClick(ProductResponse product) {
         ((MainActivity) requireActivity()).getProductDetail(product.getId());
+    }
+
+    @Override
+    public void onItemCateSearchClick(CategoryResponse category) {
+        isSort = false;
+        selectedCategoryId = category.getId();
+        currentPage = 0;
+        PRODUCT_LIST.setValue(new ArrayList<>());
+        binding.progress.progress.setVisibility(View.VISIBLE);
+        ((MainActivity) requireActivity()).getListProduct(selectedCategoryId, currentPage);
     }
 }

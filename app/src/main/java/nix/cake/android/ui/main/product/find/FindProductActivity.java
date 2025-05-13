@@ -164,7 +164,7 @@ public class FindProductActivity extends BaseActivity<ActivityFindProductBinding
     public void onSearchClick() {
         viewModel.isSearch.set(false);
         SEARCH_KEY.postValue(viewBinding.search.getText().toString());
-        getSearchProduct(null, viewBinding.search.getText().toString(), "asc");
+        getSearchProduct(null, viewBinding.search.getText().toString(), Constants.ASC);
         hideKeyboard();
     }
 
@@ -195,12 +195,43 @@ public class FindProductActivity extends BaseActivity<ActivityFindProductBinding
 
             @Override
             public void doSuccess(ResponseListObj<ProductResponse> object) {
-                PRODUCT_LIST = new MutableLiveData<>();
-                PRODUCT_LIST.postValue(object.getContent());
-                SORT.postValue(sort);
-                setUpObserversProduct();
+                if (object.getContent() == null || object.getContent().isEmpty()) {
+                    viewBinding.search.setText("");
+                    getListProduct();
+                } else {
+                    PRODUCT_LIST = new MutableLiveData<>();
+                    PRODUCT_LIST.postValue(object.getContent());
+                    SORT.postValue(sort);
+                    setUpObserversProduct();
+                }
             }
         }, categoryId, Constants.SIZE_ITEM, name, sort);
+    }
+
+    public void getListProduct() {
+        viewModel.getListProduct(new MainCalback<ResponseListObj<ProductResponse>>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doSuccess(ResponseListObj<ProductResponse> object) {
+                    PRODUCT_LIST = new MutableLiveData<>();
+                    PRODUCT_LIST.postValue(object.getContent());
+                    SORT.postValue(Constants.ASC);
+                    setUpObserversProduct();
+            }
+            @Override
+            public void doFail() {
+
+            }
+        }, null, Constants.SIZE_ITEM, Constants.PAGE_START);
     }
     public void getSortProduct(String categoryId, String name, Double fromPrice, Double toPrice, String sort) {
         viewModel.isLoading.set(true);

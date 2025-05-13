@@ -87,4 +87,24 @@ public class MyOrdersViewModel extends BaseViewModel {
                         response -> {
                         }, Timber::e));
     }
+    public void getProductDetail(MainCalback<ProductResponse> callback, String id) {
+        showLoading();
+        compositeDisposable.add(repository.getApiService().getProductDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                hideLoading();
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
 }

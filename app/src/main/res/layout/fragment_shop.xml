@@ -59,9 +59,9 @@
                             <FrameLayout
                                 android:id="@+id/l_cate"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/_30sdp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_12sdp"
-                                >
+                                android:background="@color/white">
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:id="@+id/rv_category"
                                     android:layout_width="match_parent"

@@ -34,6 +34,7 @@ import nix.cake.android.ui.base.activity.BaseActivity;
 import nix.cake.android.ui.main.MainActivity;
 import nix.cake.android.ui.main.MainCalback;
 import nix.cake.android.ui.main.product.adapter.ProductItemAdapter;
+import nix.cake.android.ui.main.product.detail.ProductDetailActivity;
 import nix.cake.android.ui.main.profile.order.adapter.OrderItemAdapter;
 import nix.cake.android.ui.main.profile.order.detail.OrderDetailActivity;
 
@@ -289,6 +290,11 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
 
     }
 
+    @Override
+    public void onPaymentClick(OrderResponse order, int position) {
+
+    }
+
     public void getListProduct(String categoryId, Integer page) {
         viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {
             @Override
@@ -310,6 +316,30 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
                 PRODUCT_LIST.setValue(currentList);
             }
         }, categoryId, page);
+    }
+    public void getProductDetail(String id) {
+        viewModel.getProductDetail(new MainCalback<ProductResponse>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doSuccess(ProductResponse object) {
+                ProductDetailActivity.PRODUCT_DETAIL = object;
+                Intent intent = new Intent(MyOrdersActivity.this, ProductDetailActivity.class);
+                startActivity(intent);
+            }
+            @Override
+            public void doFail() {
+
+            }
+        }, id);
     }
     @Override
     protected void onResume() {
@@ -334,7 +364,7 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
 
     @Override
     public void onItemClick(ProductResponse product) {
-
+        getProductDetail(product.getId());
     }
 
     @Override

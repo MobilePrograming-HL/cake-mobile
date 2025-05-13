@@ -34,6 +34,8 @@ public class Constants {
     public static final String DESC = "desc";
     public static final int TYPE_ORDER_BUY_NOW = 1;
     public static final int TYPE_ORDER_OTHER = 2;
+    public static final int COD = 1;
+    public static final int FISERV = 3;
     private Constants(){
 
     }
