@@ -39,6 +39,10 @@ public interface ApiService {
     @POST("v1/auth/active-account")
     @Headers({"IgnoreAuth: 1"})
     Observable<ResponseWrapper> activeAccount(@Body ActiveAccountRequest request);
+
+    @POST("v1/auth/resend-otp-code")
+    @Headers({"IgnoreAuth: 1"})
+    Observable<ResponseWrapper> resendOtp(@Body String email);
     @POST("v1/auth/refresh-token")
     Observable<ResponseWrapper<LoginResponse>> refreshToken(@Body String token);
     @POST("v1/auth/logout")

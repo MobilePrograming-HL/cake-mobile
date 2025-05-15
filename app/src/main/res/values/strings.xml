@@ -27,6 +27,8 @@
     <string name="send_email">send</string>
     <string name="invalid_email">Invalid email</string>
     <string name="empty"/>
+    <string name="resend_otp">Resend OTP</string>
+
     <string name="invalid_password">Invalid Password</string>
     <string name="wrong_email_password">Wrong email or password</string>
     <string name="emailRegistered">Email has been registered</string>

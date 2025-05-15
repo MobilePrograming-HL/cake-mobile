@@ -1,5 +1,7 @@
 package nix.cake.android.ui.main.cart.order;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +12,7 @@ import nix.cake.android.R;
 import nix.cake.android.databinding.ActivityOrderSuccessBinding;
 import nix.cake.android.di.component.ActivityComponent;
 import nix.cake.android.ui.base.activity.BaseActivity;
+import nix.cake.android.ui.main.profile.order.PaymentRedirectActivity;
 
 public class OrderSuccessActivity extends BaseActivity<ActivityOrderSuccessBinding, OrderSuccessViewModel> {
 
@@ -20,12 +23,17 @@ public class OrderSuccessActivity extends BaseActivity<ActivityOrderSuccessBindi
         viewBinding.setVm(viewModel);
         Uri uri = getIntent().getData();
         if (uri != null) {
-            String path = uri.getPath(); // "/success" hoặc "/fail"
-            String orderId = uri.getQueryParameter("orderId");
+            boolean isSuccess = uri.getPath().contains("success");
 
-//            if ("/success".equals(path)) {
-//            } else if ("/fail".equals(path)) {
-//            }
+            // Lấy lại orderId từ SharedPreferences
+            SharedPreferences prefs = getSharedPreferences("payment", MODE_PRIVATE);
+            String orderId = prefs.getString(PaymentRedirectActivity.KEY_ORDER_ID, null);
+
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("orderId", orderId);
+            resultIntent.putExtra("success", isSuccess);
+            setResult(RESULT_OK, resultIntent);
+            finish();
         }
     }
     public void goToShopNow() {

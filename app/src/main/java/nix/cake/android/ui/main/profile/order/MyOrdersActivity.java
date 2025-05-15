@@ -4,10 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
@@ -48,6 +51,10 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
     public String filterStatus = "All";
     public static int currentPage = 0;
     private boolean isLoading = false;
+    private int positionPayment;
+
+    private ActivityResultLauncher<Intent> paymentLauncher;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,38 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
         setUpAdapterProduct();
         setUpObserversOrder();
         startFakeLoading(viewBinding.progressLoadingFirst.progressBar);
+        handlerPayment();
+    }
+    public void handlerPayment() {
+        paymentLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String orderId = result.getData().getStringExtra("orderId");
+                        boolean success = result.getData().getBooleanExtra("success", false);
+                        for (OrderResponse item : Objects.requireNonNull(ORDER_LIST.getValue())) {
+                            if (item.getId().equals(orderId)) {
+                                if (!Objects.equals(filterStatus, "All")) {
+                                    ORDER_LIST.getValue().remove(item);
+                                    break;
+                                } else {
+                                    item.getStatus()
+                                            .setStatus(Constants.ORDER_STATUS_PROCESSING);
+                                    adapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
+                        }
+                        if (ORDER_LIST.getValue().isEmpty()) {
+                            IS_EMPTY.setValue(true);
+                        }
+                        if (!Objects.equals(filterStatus, "All")) {
+                            adapter.removeItem(positionPayment);
+                        }
+
+                    }
+                }
+        );
     }
     public void setUpAdapter() {
         adapter = new OrderItemAdapter(this);
@@ -292,8 +331,20 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
 
     @Override
     public void onPaymentClick(OrderResponse order, int position) {
+        if (order.getPaymentMethod() == Constants.FISERV && order.getFiservInfo() != null
+                && order.getFiservInfo().getCheckout() != null) {
 
+            String url = order.getFiservInfo().getCheckout().getRedirectionUrl();
+            if (url != null && !url.isEmpty()) {
+                Intent intent = new Intent(this, PaymentRedirectActivity.class);
+                intent.putExtra("paymentUrl", url);
+                intent.putExtra("orderId", order.getId());
+                positionPayment = position;
+                paymentLauncher.launch(intent);  // Dùng ActivityResultLauncher
+            }
+        }
     }
+
 
     public void getListProduct(String categoryId, Integer page) {
         viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {

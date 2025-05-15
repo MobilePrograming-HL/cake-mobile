@@ -249,6 +249,7 @@ public class CreateOrderActivity extends BaseActivity<ActivityCreateOrderBinding
                         if (url != null && !url.isEmpty()) {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                             startActivity(browserIntent);
+                            finish();
                             return;
                         }
                     }
@@ -282,6 +283,7 @@ public class CreateOrderActivity extends BaseActivity<ActivityCreateOrderBinding
                         if (url != null && !url.isEmpty()) {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                             startActivity(browserIntent);
+                            finish();
                             return;
                         }
                     }

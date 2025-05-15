@@ -150,19 +150,3 @@ public class ProvinceFragment extends BaseFragment<FragmentSelectProvinceBinding
         handler.removeCallbacksAndMessages(null);
     }
 }
-
-//    private void setupSearchView() {
-//        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                resetPagination(); // Reset pagination when searching
-//                adapter.filter(newText);
-//                return true;
-//            }
-//        });
-//    }
