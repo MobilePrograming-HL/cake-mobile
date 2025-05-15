@@ -1,0 +1,11 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Màu nền trắng -->
+    <item android:drawable="@android:color/white" />
+
+    <!-- Logo splash -->
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/mee_oi_logo" />
+    </item>
+</layer-list>

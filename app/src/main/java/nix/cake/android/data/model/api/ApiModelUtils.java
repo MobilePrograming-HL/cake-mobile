@@ -22,7 +22,7 @@ public class ApiModelUtils {
             .create();
 
 
-    public <T> T getDataObject(String data, Class<T> classOfT) {
+    public static  <T> T getDataObject(String data, Class<T> classOfT) {
         if (data == null) {
             return null;
         } else {

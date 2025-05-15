@@ -1,5 +1,7 @@
 package nix.cake.android.ui.base.activity;
 
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -8,9 +10,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
@@ -58,7 +65,8 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
     // Listen all action from local
     private BroadcastReceiver globalApplicationReceiver;
     private IntentFilter filterGlobalApplication;
-
+    public ValueAnimator fakeProgressAnimator;
+    public int currentProgress = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         performDependencyInjection(getBuildComponent());
@@ -84,11 +92,6 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 toastMessage.showMessage(getApplicationContext());
             }
         });
-        viewModel.progressBarMsg.observe(this, progressBarMsg ->{
-            if (progressBarMsg != null){
-                changeProgressBarMsg(progressBarMsg);
-            }
-        });
         filterGlobalApplication = new IntentFilter();
         filterGlobalApplication.addAction(Constants.ACTION_EXPIRED_TOKEN);
         globalApplicationReceiver = new BroadcastReceiver() {
@@ -103,11 +106,22 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 }
             }
         };
+        setupEditorActionListenerForAllEditTexts(viewBinding.getRoot());
     }
-
+    protected void startFakeLoading(ProgressBar progressBar) {
+        fakeProgressAnimator = ValueAnimator.ofInt(0, 90);
+        fakeProgressAnimator.setDuration(1000);
+        fakeProgressAnimator.setInterpolator(new LinearInterpolator());
+        fakeProgressAnimator.addUpdateListener(animation -> {
+            currentProgress = (int) animation.getAnimatedValue();
+            progressBar.setProgress(currentProgress);
+        });
+        fakeProgressAnimator.start();
+    }
     @Override
     protected void onResume() {
         super.onResume();
+        viewModel.hideLoading();
         LocalBroadcastManager.getInstance(this).registerReceiver(globalApplicationReceiver, filterGlobalApplication);
         updateCurrentAcitivity();
     }
@@ -133,7 +147,32 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
             requestPermissions(permissions, requestCode);
         }
     }
+    private void setupEditorActionListenerForAllEditTexts(View view) {
+        if (view instanceof EditText) {
+            EditText editText = (EditText) view;
+            editText.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                        actionId == EditorInfo.IME_ACTION_GO ||
+                        actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        actionId == EditorInfo.IME_ACTION_SEND ||
+                        (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                                event.getAction() == KeyEvent.ACTION_DOWN)) {
 
+                    hideKeyboard();
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                setupEditorActionListenerForAllEditTexts(child);
+            }
+        }
+    }
     public void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -142,10 +181,12 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         }
+        clearFocusFromAllEditTexts(viewBinding.getRoot());
     }
 
 
-    private void setupHideKeyboardOnTouch() {
+    @SuppressLint("ClickableViewAccessibility")
+    public void setupHideKeyboardOnTouch() {
         // Find root layout of the activity
         View rootView = findViewById(android.R.id.content);
 
@@ -165,6 +206,18 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
         });
     }
 
+    public void clearFocusFromAllEditTexts(View view) {
+        if (view instanceof EditText) {
+            view.clearFocus();
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                clearFocusFromAllEditTexts(child);
+            }
+        }
+    }
 
     private void performDataBinding() {
         viewBinding = DataBindingUtil.setContentView(this, getLayoutId());
@@ -180,13 +233,6 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
         progressDialog = DialogUtils.createDialogLoading(this, msg);
         progressDialog.show();
     }
-
-    public void changeProgressBarMsg(String msg){
-        if (progressDialog != null){
-            ((TextView)progressDialog.findViewById(R.id.progressbar_msg)).setText(msg);
-        }
-    }
-
     public void hideProgress() {
         if (progressDialog != null) {
             progressDialog.dismiss();
@@ -235,6 +281,8 @@ public abstract class BaseActivity<B extends ViewDataBinding, V extends BaseView
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        clearFocusFromAllEditTexts(viewBinding.getRoot());
+
     }
     public boolean isLogin() {
         return viewModel.getRepository().getToken() != null && !Objects.equals(viewModel.getRepository().getToken(), "") && !Objects.equals(viewModel.getRepository().getToken(), "NULL");

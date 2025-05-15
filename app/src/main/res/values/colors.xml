@@ -25,5 +25,11 @@
     <color name="text_all">#DB3022</color>
     <color name="bg_fragment">#F3F3F3</color>
     <color name="status_order">#2AA952</color>
-
+    <color name="bg_show_popup_location">#40000000</color>
+    <color name="line">#9B9B9B</color>
+    <color name="delete_item">#FF5722</color>
+    <color name="img_default">#F3F3F3</color>
+    <color name="over_lay">#20000000</color>
+    <color name="shipping_method">#FAFAFA</color>
+    <color name="text_money">#F01F0E</color>
 </resources>

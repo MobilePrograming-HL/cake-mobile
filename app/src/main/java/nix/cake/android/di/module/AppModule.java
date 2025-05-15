@@ -34,6 +34,7 @@ import nix.cake.android.data.remote.AuthInterceptor;
 import nix.cake.android.di.qualifier.ApiInfo;
 import nix.cake.android.di.qualifier.DatabaseInfo;
 import nix.cake.android.di.qualifier.PreferenceInfo;
+import nix.cake.android.utils.SSLUtil;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -94,11 +95,16 @@ public class AppModule {
         } else {
             loggingInterceptor.level(HttpLoggingInterceptor.Level.NONE);
         }
-        return new OkHttpClient.Builder()
-                .addInterceptor(authInterceptor)
-                .addInterceptor(loggingInterceptor)
+
+        OkHttpClient client = SSLUtil.getUnsafeOkHttpClient();
+
+        return client.newBuilder()
+                .addInterceptor(authInterceptor)  // Thêm AuthInterceptor
+                .addInterceptor(loggingInterceptor)  // Thêm LoggingInterceptor
                 .build();
     }
+
+
 
     // Create Retrofit
     @Provides

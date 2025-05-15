@@ -9,12 +9,16 @@
         <variable
             name="vm"
             type="nix.cake.android.ui.main.cart.CartViewModel" />
+
+        <variable
+            name="countCheckout"
+            type="String" />
         <import type="android.view.View"/>
     </data>
 
     <FrameLayout
         android:animateLayoutChanges="true"
-        android:background="@color/white"
+        android:background="@color/bg_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -22,125 +26,207 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/my_cart"
-                android:textSize="@dimen/_30ssp"
-                android:textStyle="bold"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:fontFamily="@font/roboto_600"
-                android:textColor="@color/text"/>
-
-            <LinearLayout
-                android:id="@+id/countItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_6sdp"
-                android:layout_below="@+id/title"
-                android:orientation="horizontal"
-                android:onClick="@{v -> f.onAllClick()}">
-
-                <ImageView
-                    android:id="@+id/checked"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:src="@drawable/unchecked"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:layout_margin="@dimen/_8sdp"/>
-
-                <TextView
-                    android:id="@+id/choose_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/choose_all"
-                    android:textSize="@dimen/_14ssp"
-                    android:textColor="@color/text_second"
-                    android:layout_margin="@dimen/_8sdp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/roboto_600"/>
-
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/line1"
-                android:layout_width="match_parent"
-                android:layout_marginVertical="@dimen/_9sdp"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_height="1dp"
-                android:background="@color/text_second"
-                android:layout_below="@+id/countItem"/>
-
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:scrollbars="none"
-                android:id="@+id/rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/line1"
-                android:layout_above="@+id/layoutCheckOut">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-
             <RelativeLayout
-                android:id="@+id/layoutCheckOut"
+                android:id="@+id/l_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-                <View
-                    android:id="@+id/line2"
-                    android:layout_width="match_parent"
-                    android:layout_marginVertical="@dimen/_9sdp"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_height="1dp"
-                    android:background="@color/text_second"
-                    android:layout_marginTop="8dp"/>
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{v -> f.onAllClick()}"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="@{vm.isEmpty ? View.INVISIBLE : View.VISIBLE}">
+                    <ImageView
+                        android:id="@+id/checked"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:src="@drawable/unchecked"
+                        android:padding="@dimen/_10sdp"
+                        android:onClick="@{v -> f.onCheckAllClick()}"
+                        android:layout_marginVertical="@dimen/_10ssp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all"
+                        android:textColor="@color/text"
+                        android:textSize="@dimen/_14ssp"
+                        android:fontFamily="@font/roboto_500"/>
+
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/line2"
-                    android:text="@string/total_amount"
-                    android:textColor="@color/text_second"
-                    android:textSize="@dimen/_14ssp"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:fontFamily="@font/roboto_600"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/line2"
-                    android:text="@string/_123"
+                    android:layout_centerInParent="true"
+                    android:text="@string/cart"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold"
                     android:textColor="@color/text"
-                    android:textSize="@dimen/_14ssp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/_12sdp"
-                    android:fontFamily="@font/roboto_600"
-                    android:textStyle="bold"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:background="@drawable/background_button_login_radius_25"
-                    android:text="@string/check_out"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15ssp"
-                    android:fontFamily="@font/roboto_500"
-                    android:layout_marginHorizontal="@dimen/_24sdp"
-                    android:layout_marginVertical="@dimen/_14sdp"
-                    android:layout_below="@id/total"/>
-
+                    android:fontFamily="@font/roboto_500"/>
             </RelativeLayout>
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/l_header"
+                android:layout_marginTop="1dp"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@id/l_checkout">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <FrameLayout
+                                android:id="@+id/l_cart_item"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_100sdp"
+                                    android:background="@color/white"
+                                    android:visibility="@{vm.isEmpty ? View.VISIBLE : View.GONE}">
+
+                                    <LinearLayout
+                                        android:id="@+id/l_is_empty"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:orientation="vertical"
+                                        android:gravity="center">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/your_cart_is_empty"
+                                            android:textStyle="bold"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:textColor="@color/text"
+                                            android:layout_gravity="center"
+                                            android:fontFamily="@font/roboto_500"
+                                            android:layout_marginBottom="@dimen/_12sdp"/>
+
+                                        <TextView
+                                            android:id="@+id/go_to_shop"
+                                            android:layout_width="@dimen/_120sdp"
+                                            android:layout_height="@dimen/_30sdp"
+                                            android:layout_weight="1"
+                                            android:background="@color/text"
+                                            android:text="@string/go_to_shop_now"
+                                            android:gravity="center"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/_12ssp"
+                                            android:textStyle="bold"
+                                            android:onClick="@{v -> f.onGoToShopClick()}"/>
+
+
+                                    </LinearLayout>
+                                </RelativeLayout>
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_below="@+id/l_cart_item"
+                                android:layout_marginTop="@dimen/_12sdp"
+                                android:orientation="vertical"
+                                android:background="@color/bg">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/you_might_like_to_fill_it_with"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/_12ssp"
+                                    android:textColor="@color/text"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/roboto_500"/>
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/rv_product"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginTop="@dimen/_12sdp"
+                                        android:layout_marginStart="@dimen/_12sdp"
+                                        />
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </androidx.core.widget.NestedScrollView>
+
+                    <LinearLayout
+                        android:id="@+id/l_checkout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="-1dp"
+                        android:background="@color/white"
+                        android:visibility="@{vm.isEmpty ? View.GONE : View.VISIBLE}"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_12sdp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_600"
+                            android:text="@{vm.total}"
+                            android:textColor="@color/text"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:layout_marginHorizontal="@dimen/_12sdp"
+                            android:layout_marginVertical="@dimen/_14sdp"
+                            android:layout_weight="1"
+                            android:background="@color/text"
+                            android:fontFamily="@font/roboto_500"
+                            android:gravity="center"
+                            android:text="@string/check_out"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp"
+                            android:textStyle="bold"
+                            android:onClick="@{v -> f.onCheckOutClick()}"/>
+                    </LinearLayout>
+                </RelativeLayout>
+                <include
+                    android:id="@+id/progress_loading_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    layout="@layout/layout_loading_progressbar_top"
+                    android:visibility="visible"/>
+            </FrameLayout>
+
+
         </RelativeLayout>
+
 
     </FrameLayout>
 </layout>

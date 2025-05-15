@@ -34,13 +34,15 @@
                 android:id="@+id/bottom_nav"
                 app:menu="@menu/bottom_navigation_menu"
                 android:layout_width="match_parent"
-                android:background="@drawable/background_bottom_nav"
                 android:layout_height="@dimen/_50sdp"
+                android:background="@drawable/background_bottom_nav"
+                android:elevation="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:itemIconTint="@color/icon_nav_un_select"
-                app:itemTextColor="@color/icon_nav_un_select"
+                app:itemIconTint="@color/icon_nav_selector"
+                app:itemTextColor="@color/icon_nav_selector"
                 app:labelVisibilityMode="labeled"
-                android:elevation="8dp"/>
+                android:visibility="@{vm.isShowBottomNav ? View.VISIBLE : View.GONE}" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

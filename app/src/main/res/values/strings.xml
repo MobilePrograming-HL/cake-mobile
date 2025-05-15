@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">cake</string>
+    <string name="app_name">Mee oii</string>
     <string name="msg_loading">Please wait ...</string>
 
     <!--Network error-->
@@ -27,6 +27,8 @@
     <string name="send_email">send</string>
     <string name="invalid_email">Invalid email</string>
     <string name="empty"/>
+    <string name="resend_otp">Resend OTP</string>
+
     <string name="invalid_password">Invalid Password</string>
     <string name="wrong_email_password">Wrong email or password</string>
     <string name="emailRegistered">Email has been registered</string>
@@ -38,23 +40,25 @@
     <string name="choose_all">Choose all</string>
     <string name="total_amount">Total amount:</string>
     <string name="_123">123$</string>
-    <string name="check_out">Check Out</string>
+    <string name="check_out">Checkout</string>
     <string name="my_orders">My orders</string>
     <string name="shipping_addresses">Shipping addresses</string>
-    <string name="payment_method">Payment methods</string>
+    <string name="my_addresses">My addresses</string>
+    <string name="payment_method">Payment method</string>
     <string name="coupon_code">Coupon codes</string>
     <string name="settings">Settings</string>
     <string name="name_password">Name, password</string>
 
     <string name="filter">Filter</string>
     <string name="status_all">All</string>
-    <string name="status_wait_for_confirmation">Waiting</string>
+    <string name="status_wait_for_confirmation">Pending</string>
     <string name="status_processing">Processing</string>
+    <string name="status_shipping">Shipping</string>
     <string name="status_delivered">Delivered</string>
     <string name="status_cancelled">Cancelled</string>
     <string name="see_details">Details</string>
     <string name="Cancel">Cancel</string>
-    <string name="order_no">Order No:</string>
+    <string name="payment_">Payment</string>
     <string name="quantity">Quantity:</string>
     <string name="order_details">Order Details</string>
     <string name="address">Address:</string>
@@ -67,7 +71,9 @@
     <string name="buy">Buy</string>
     <string name="total">Total:</string>
     <string name="edit">Edit</string>
+    <string name="Add_address">Create address</string>
     <string name="edit_address">Edit address</string>
+
     <string name="phone">Phone</string>
     <string name="address_detail">Address</string>
     <string name="save_address">Save address</string>
@@ -77,6 +83,86 @@
     <string name="view_all">View all</string>
     <string name="popular">Popular</string>
     <string name="username">Username</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="categories">Categories</string>
+    <string name="sort_by">Sort by</string>
+    <string name="newest">Newest</string>
+    <string name="customer_review">Customer Review</string>
+    <string name="price_lowest_to_highest">Price: lowest to highest</string>
+    <string name="price_highest_to_lowest">Price: highest to lowest</string>
+    <string name="sold">Sold</string>
+    <string name="description">Description</string>
+    <string name="ratings">ratings</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="mgs_otp">We have sent the verification code to your email</string>
+    <string name="error_empty_otp">Please fill in all OTP fields.</string>
+    <string name="search">Search</string>
+    <string name="may_be">May be you like</string>
+    <string name="add_to_cart">ADD TO CART</string>
+    <string name="buy_now">BUY NOW</string>
+    <string name="invetory">Invetory:</string>
+    <string name="delete">Delete</string>
+    <string name="all">All</string>
+    <string name="make_default">Make Default</string>
+    <string name="province">Province</string>
+    <string name="district">District</string>
+    <string name="commune">Commune</string>
+    <string name="choose">Choose</string>
+    <string name="warning_name">Name should contain 2–40 characters</string>
+    <string name="warning_phone">Phone number should be 10 to 11 digits starting with 0</string>
+    <string name="warning_province">Please choose your province</string>
+    <string name="warning_district">Please choose your district</string>
+    <string name="warning_commune">Please choose your commune</string>
+    <string name="warning_address">Street address should contain 5–120 characters</string>
+    <string name="choose_province">Choose your province here</string>
+    <string name="choose_district">Choose your district here</string>
+    <string name="choose_commune">Choose your commune here</string>
+    <string name="default_address">Default</string>
+    <string name="set_as_default_address">Set as default address</string>
+    <string name="are_you_sure_to_delete_this_item">Are you sure to delete this item?</string>
+    <string name="are_you_sure_to_cancel_this_order">Are you sure to cancel this order?</string>
 
+    <string name="you_might_like_to_fill_it_with">You Might Like to Fill it With</string>
+    <string name="your_cart_is_empty">Your cart is empty</string>
+    <string name="your_order_is_empty">Your order is empty</string>
 
+    <string name="go_to_shop_now">Go to shop now</string>
+    <string name="order">Order</string>
+    <string name="order_item">Order items</string>
+    <string name="shipping_method">Shipping Method</string>
+    <string name="Payment_method">Payment Method</string>
+    <string name="standard_shipping">Standard Shipping</string>
+    <string name="fast_shipping">Fast Shipping</string>
+    <string name="arrive_between">Arrive Between</string>
+    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="credit">Credit/Debit Card</string>
+    <string name="paypal">Paypal</string>
+    <string name="fiserv">Fiserv</string>
+    <string name="apply_coupon">Apply Coupon</string>
+    <string name="retail_price">Retail Price:</string>
+    <string name="shipping_fee">Shipping Fee:</string>
+    <string name="coupon_s">Coupon(s):</string>
+    <string name="go">Go</string>
+    <string name="price_range">Price Range</string>
+    <string name="clear">Clear</string>
+    <string name="done">Done</string>
+    <string name="order_no">Order #</string>
+    <string name="more">More</string>
+    <string name="total_count">Total</string>
+    <string name="received">Received</string>
+    <string name="best_sellers">Best Sellers</string>
+    <string name="deals">Deals</string>
+    <string name="recently_searched">Recently Searched</string>
+    <string name="add_new_address">Add new Address</string>
+    <string name="review">Review</string>
+    <string name="grand_total">Grand Total: </string>
+    <string name="order_time">Order Time</string>
+    <string name="what_s_your_rate">What\'s your rate?</string>
+    <string name="please_share_your_opinion_about_the_product">Please share your opinion \n about the product</string>
+    <string name="send_review">Send Review</string>
+    <string name="you_are_not_log_in_click_here">You are not log in, click here.</string>
+    <string name="mgs_order_success">Your order will be delivery soon. \n Thank for your choosing our app!</string>
+    <string name="mgs_order_success_2">Success!</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

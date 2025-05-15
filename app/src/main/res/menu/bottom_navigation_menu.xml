@@ -8,7 +8,8 @@
         android:id="@+id/shop"
         android:enabled="true"
         android:icon="@drawable/shop"
-        android:title="@string/shop"/>
+        android:title="@string/shop"
+        />
     <item
         android:id="@+id/cart"
         android:enabled="true"

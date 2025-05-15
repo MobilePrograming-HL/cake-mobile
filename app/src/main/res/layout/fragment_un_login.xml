@@ -5,10 +5,10 @@
     <data>
         <variable
             name="f"
-            type="nix.cake.android.ui.main.shop.ShopFragment" />
+            type="nix.cake.android.ui.main.login.UnLoginFragment" />
         <variable
             name="vm"
-            type="nix.cake.android.ui.main.shop.ShopViewModel" />
+            type="nix.cake.android.ui.main.login.UnLoginViewModel" />
         <import type="android.view.View"/>
     </data>
 
@@ -18,22 +18,92 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:queryHint="Search here..."
-                app:iconifiedByDefault="false"/>
+                android:background="@color/white"
+                android:orientation="vertical">
 
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/gif"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:src="@drawable/rabbit"
+                    android:layout_marginTop="@dimen/_24sdp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/you_are_not_log_in_click_here"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/text"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_500"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:text="@string/login"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/roboto_500"
+                    android:textSize="@dimen/_14ssp"
+                    android:onClick="@{v -> f.onLoginClick()}"
+                    android:gravity="center"
+                    android:background="@color/text"
+                    android:layout_marginVertical="@dimen/_12sdp"
+                    android:layout_marginHorizontal="@dimen/_72sdp"/>
+
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/you_might_like_to_fill_it_with"
+                android:textStyle="bold"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/text"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_500"
+                android:layout_marginTop="@dimen/_6sdp"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_15sdp"
+                    android:visibility="@{vm.isLoading ? View.VISIBLE : View.INVISIBLE}"
+                    android:background="@color/bg"
+                    >
+
+                    <ProgressBar
+                        android:layout_width="@dimen/_34sdp"
+                        android:layout_height="@dimen/_34sdp"
+                        android:indeterminateTint="@color/text"
+                        />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
 
     </FrameLayout>
 </layout>
