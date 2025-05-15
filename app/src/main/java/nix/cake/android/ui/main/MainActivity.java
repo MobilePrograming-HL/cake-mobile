@@ -99,6 +99,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                             unLoginFragment = new UnLoginFragment();
                             fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
                         } else {
+                            getListProductForUnLogin(null, "", "asc");
                             fm.beginTransaction().hide(active).show(unLoginFragment).commit();
                         }
                         active = unLoginFragment;
@@ -120,6 +121,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                             unLoginFragment = new UnLoginFragment();
                             fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
                         } else {
+                            getListProductForUnLogin(null, "", "asc");
                             fm.beginTransaction().hide(active).show(unLoginFragment).commit();
                         }
                         active = unLoginFragment;
@@ -159,6 +161,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         unLoginFragment = new UnLoginFragment();
                         fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
                     } else {
+                        getListProductForUnLogin(null, "", "asc");
                         fm.beginTransaction().hide(active).show(unLoginFragment).commit();
                     }
                     active = unLoginFragment;
@@ -182,6 +185,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         unLoginFragment = new UnLoginFragment();
                         fm.beginTransaction().add(R.id.nav_host_fragment, unLoginFragment, UNLOGIN).hide(active).commit();
                     } else {
+                        getListProductForUnLogin(null, "", "asc");
                         fm.beginTransaction().hide(active).show(unLoginFragment).commit();
                     }
                     active = unLoginFragment;

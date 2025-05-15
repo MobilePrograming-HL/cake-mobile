@@ -33,7 +33,6 @@ public class OrderSuccessActivity extends BaseActivity<ActivityOrderSuccessBindi
             resultIntent.putExtra("orderId", orderId);
             resultIntent.putExtra("success", isSuccess);
             setResult(RESULT_OK, resultIntent);
-            finish();
         }
     }
     public void goToShopNow() {
