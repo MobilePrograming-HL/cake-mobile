@@ -1,8 +1,13 @@
 package nix.cake.android.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DisplayUtils {
 
@@ -60,5 +65,23 @@ public class DisplayUtils {
             return String.format("%db", value / 1000000000);
         }
     }
+    public static String formatIsoToLocal(String isoString) {
+        ZonedDateTime utcTime = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            utcTime = ZonedDateTime.parse(isoString);
+        }
+        ZonedDateTime localTime = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            localTime = utcTime.withZoneSameInstant(ZoneId.of("Asia/Ho_Chi_Minh"));
+        }
+        DateTimeFormatter formatter = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return localTime.format(formatter);
+        }
 
+        return isoString;
+    }
 }

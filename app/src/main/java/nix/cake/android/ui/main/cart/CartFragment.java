@@ -309,7 +309,6 @@ public class CartFragment extends BaseFragment<FragmentCartBinding, CartViewMode
                 .mapToDouble(CartItemResponse::getTotal)
                 .sum();
         viewModel.total.postValue(DisplayUtils.convertDoubleTwoDecimalsHasCurrency(total));
-
     }
     public void onCheckAllClick() {
         if (CART == null || CART.getValue() == null) {

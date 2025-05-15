@@ -3,16 +3,12 @@ package nix.cake.android.ui.main.product.detail;
 import static nix.cake.android.utils.DisplayUtils.convertDoubleTwoDecimalsHasCurrency;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,7 +35,6 @@ import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
 import nix.cake.android.databinding.ActivityProductDetailBinding;
 import nix.cake.android.di.component.ActivityComponent;
 import nix.cake.android.ui.base.activity.BaseActivity;
-import nix.cake.android.ui.main.MainActivity;
 import nix.cake.android.ui.main.MainCalback;
 import nix.cake.android.ui.main.cart.order.CreateOrderActivity;
 import nix.cake.android.ui.main.login.LoginActivity;
@@ -70,7 +65,7 @@ public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBin
 
         imageSliderAdapter = new ImageSliderAdapter(this, viewModel.productDetail.getImages());
         viewBinding.img.setAdapter(imageSliderAdapter);
-
+        viewBinding.setSold(viewModel.productDetail.getTotalSold().toString());
         viewBinding.img.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -269,7 +264,6 @@ public class ProductDetailActivity extends BaseActivity<ActivityProductDetailBin
         } else {
             viewModel.showNormalMessage("Please select flavor!");
         }
-
     }
     public void getListAddressForCreateOrder(int size) {
         viewModel.getListAddresses(new MainCalback<ResponseListObj<AddressResponse>>() {

@@ -44,10 +44,10 @@ public class OrderDetailActivity extends BaseActivity<ActivityOrderDetailBinding
                 viewBinding.total.setText(DisplayUtils.convertDoubleTwoDecimalsHasCurrency(order.getTotalAmount()));
 
                 viewBinding.shippingMethod.setText(order.getTypeShipping());
+                viewBinding.orderTime.setText(DisplayUtils.formatIsoToLocal(order.getCreatedAt()));
+                viewBinding.paymentMethod.setText(R.string.cash_on_delivery);
             }
         });
-
-
     }
     public void setUpAdapter() {
         adapter = new OrderDetailItemAdapter(this);

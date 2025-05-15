@@ -8,6 +8,7 @@ import nix.cake.android.constant.Constants;
 @Data
 public class OrderResponse {
     private String id;
+    private String code;
     private CustomerResponse customer;
     private List<OrderItemResponse> orderItems;
     private Integer shippingFee;
@@ -17,6 +18,8 @@ public class OrderResponse {
     private OrderStatusResponse status;
     private String note;
     private AddressResponse address;
+    private String createdAt;
+    private FiservCreateCheckoutResponse fiservInfo;
 
     public String getTypeShipping() {
         if (shippingFee == 25000) {

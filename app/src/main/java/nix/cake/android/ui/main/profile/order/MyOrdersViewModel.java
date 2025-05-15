@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import nix.cake.android.MVVMApplication;
 import nix.cake.android.data.Repository;
 import nix.cake.android.data.model.api.ResponseListObj;
+import nix.cake.android.data.model.api.request.cart.UpdateCartItemRequest;
 import nix.cake.android.data.model.api.request.order.CreateOrderRequest;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
@@ -69,6 +70,34 @@ public class MyOrdersViewModel extends BaseViewModel {
                             if (response.isResult()) {
                                 callback.doSuccess(response.getData());
                             } else {
+                                callback.doFail();
+                            }
+                        }, throwable -> {
+                            Timber.e(throwable);
+                            callback.doError(throwable);
+                        }
+                )
+        );
+    }
+    public void cancelOrder(String id) {
+        compositeDisposable.add(repository.getApiService().cancelOrder(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                        }, Timber::e));
+    }
+    public void getProductDetail(MainCalback<ProductResponse> callback, String id) {
+        showLoading();
+        compositeDisposable.add(repository.getApiService().getProductDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            if (response.isResult()) {
+                                callback.doSuccess(response.getData());
+                            } else {
+                                hideLoading();
                                 callback.doFail();
                             }
                         }, throwable -> {

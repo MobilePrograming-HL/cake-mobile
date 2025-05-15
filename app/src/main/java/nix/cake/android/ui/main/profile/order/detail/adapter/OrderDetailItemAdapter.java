@@ -51,7 +51,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
         OrderItemResponse item = data.get(position);
         holder.binding.name.setText(item.getProduct().getName());
         holder.binding.count.setText("x" + " " + item.getQuantity());
-        holder.binding.total.setText(DisplayUtils.convertDoubleTwoDecimalsHasCurrency(item.getPrice()));
+        holder.binding.total.setText(DisplayUtils.convertDoubleTwoDecimalsHasCurrency(item.getPriceOfProduct()));
         Glide.with(holder.itemView.getContext())
                 .load(item.getProduct().getImage())
                 .placeholder(R.color.img_default)

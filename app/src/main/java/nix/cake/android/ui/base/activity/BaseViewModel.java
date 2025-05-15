@@ -28,7 +28,7 @@ public class BaseViewModel extends ViewModel {
     protected String deviceId;
 
     @Getter
-    protected final Repository repository;
+    public final Repository repository;
 
     @Getter
     protected final MVVMApplication application;

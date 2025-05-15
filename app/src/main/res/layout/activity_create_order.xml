@@ -365,11 +365,13 @@
                             android:gravity="center|start">
 
                             <FrameLayout
+                                android:id="@+id/cod"
                                 android:layout_width="@dimen/_24sdp"
                                 android:layout_height="@dimen/_24sdp"
                                 android:layout_marginStart="@dimen/_12sdp">
 
                                 <ImageView
+                                    android:id="@+id/cod_img"
                                     android:layout_width="@dimen/_16sdp"
                                     android:layout_height="@dimen/_16sdp"
                                     android:src="@drawable/checked"
@@ -401,11 +403,13 @@
                             android:gravity="center|start">
 
                             <FrameLayout
+                                android:id="@+id/card"
                                 android:layout_width="@dimen/_24sdp"
                                 android:layout_height="@dimen/_24sdp"
                                 android:layout_marginStart="@dimen/_12sdp">
 
                                 <ImageView
+                                    android:id="@+id/card_img"
                                     android:layout_width="@dimen/_16sdp"
                                     android:layout_height="@dimen/_16sdp"
                                     android:src="@drawable/unchecked"
@@ -438,11 +442,13 @@
                             android:gravity="center|start">
 
                             <FrameLayout
+                                android:id="@+id/fiserv"
                                 android:layout_width="@dimen/_24sdp"
                                 android:layout_height="@dimen/_24sdp"
                                 android:layout_marginStart="@dimen/_12sdp">
 
                                 <ImageView
+                                    android:id="@+id/fiserv_img"
                                     android:layout_width="@dimen/_16sdp"
                                     android:layout_height="@dimen/_16sdp"
                                     android:src="@drawable/unchecked"
@@ -453,12 +459,12 @@
                             <ImageView
                                 android:layout_width="@dimen/_16sdp"
                                 android:layout_height="@dimen/_16sdp"
-                                android:src="@drawable/paypal"
+                                android:src="@drawable/fiserv_logo"
                                 android:layout_marginHorizontal="@dimen/_6sdp"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/paypal"
+                                android:text="@string/fiserv"
                                 android:textColor="@color/text"
                                 android:textSize="@dimen/_12ssp"
                                 android:fontFamily="@font/roboto_500"/>

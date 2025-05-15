@@ -24,6 +24,7 @@ import nix.cake.android.ui.main.profile.address.ShippingAddressViewModel;
 import nix.cake.android.ui.main.profile.address.detail.AddressDetailViewModel;
 import nix.cake.android.ui.main.profile.order.MyOrdersViewModel;
 import nix.cake.android.ui.main.profile.order.detail.OrderDetailViewModel;
+import nix.cake.android.ui.main.splash.SplashViewModel;
 import nix.cake.android.utils.GetInfo;
 
 import javax.inject.Named;
@@ -156,5 +157,13 @@ public class ActivityModule {
         Supplier<OrderSuccessViewModel> supplier = () -> new OrderSuccessViewModel(repository, (MVVMApplication)application);
         ViewModelProviderFactory<OrderSuccessViewModel> factory = new ViewModelProviderFactory<>(OrderSuccessViewModel.class, supplier);
         return new ViewModelProvider(activity, factory).get(OrderSuccessViewModel.class);
+    }
+
+    @Provides
+    @ActivityScope
+    SplashViewModel provideSplashViewModel(Repository repository, Context application) {
+        Supplier<SplashViewModel> supplier = () -> new SplashViewModel(repository, (MVVMApplication)application);
+        ViewModelProviderFactory<SplashViewModel> factory = new ViewModelProviderFactory<>(SplashViewModel.class, supplier);
+        return new ViewModelProvider(activity, factory).get(SplashViewModel.class);
     }
 }

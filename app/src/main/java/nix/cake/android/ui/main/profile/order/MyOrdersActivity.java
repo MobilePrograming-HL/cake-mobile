@@ -4,10 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
@@ -17,10 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import eu.davidea.flexibleadapter.databinding.BR;
 import nix.cake.android.R;
 import nix.cake.android.constant.Constants;
+import nix.cake.android.custom.CustomDialog;
 import nix.cake.android.data.model.api.ResponseListObj;
 import nix.cake.android.data.model.api.response.cart.CartItemResponse;
 import nix.cake.android.data.model.api.response.product.ProductResponse;
@@ -32,6 +37,7 @@ import nix.cake.android.ui.base.activity.BaseActivity;
 import nix.cake.android.ui.main.MainActivity;
 import nix.cake.android.ui.main.MainCalback;
 import nix.cake.android.ui.main.product.adapter.ProductItemAdapter;
+import nix.cake.android.ui.main.product.detail.ProductDetailActivity;
 import nix.cake.android.ui.main.profile.order.adapter.OrderItemAdapter;
 import nix.cake.android.ui.main.profile.order.detail.OrderDetailActivity;
 
@@ -42,9 +48,13 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
     public static MutableLiveData<List<OrderResponse>> ORDER_LIST = new MutableLiveData<>();
     public static MutableLiveData<Boolean> IS_EMPTY= new MutableLiveData<>(false);
     public static Integer STATUS = Constants.ORDER_STATUS_ALL;
-
+    public String filterStatus = "All";
     public static int currentPage = 0;
     private boolean isLoading = false;
+    private int positionPayment;
+
+    private ActivityResultLauncher<Intent> paymentLauncher;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +65,38 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
         setUpAdapterProduct();
         setUpObserversOrder();
         startFakeLoading(viewBinding.progressLoadingFirst.progressBar);
+        handlerPayment();
+    }
+    public void handlerPayment() {
+        paymentLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String orderId = result.getData().getStringExtra("orderId");
+                        boolean success = result.getData().getBooleanExtra("success", false);
+                        for (OrderResponse item : Objects.requireNonNull(ORDER_LIST.getValue())) {
+                            if (item.getId().equals(orderId)) {
+                                if (!Objects.equals(filterStatus, "All")) {
+                                    ORDER_LIST.getValue().remove(item);
+                                    break;
+                                } else {
+                                    item.getStatus()
+                                            .setStatus(Constants.ORDER_STATUS_PROCESSING);
+                                    adapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
+                        }
+                        if (ORDER_LIST.getValue().isEmpty()) {
+                            IS_EMPTY.setValue(true);
+                        }
+                        if (!Objects.equals(filterStatus, "All")) {
+                            adapter.removeItem(positionPayment);
+                        }
+
+                    }
+                }
+        );
     }
     public void setUpAdapter() {
         adapter = new OrderItemAdapter(this);
@@ -151,9 +193,11 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
         getListProduct(null, currentPage);
     }
     public void onFilterClicked(String filter) {
+        filterStatus = "";
         viewBinding.statusOrder.setText(filter);
         switch (filter) {
             case "All":
+                filter = "All";
                 visibleAllTick();
                 getOrderByFilter(Constants.ORDER_STATUS_ALL);
                 viewBinding.tickAll.setVisibility(View.VISIBLE);
@@ -248,9 +292,59 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
     }
 
     @Override
-    public void onCancelClick(OrderItemResponse order) {
+    public void onCancelClick(OrderResponse order, int position) {
+        new CustomDialog(this)
+                .setDeleteText(getString(R.string.yes))
+                .setCancelText(getString(R.string.no))
+                .setTitle(getString(R.string.are_you_sure_to_cancel_this_order))
+                .setOnClickListener(new CustomDialog.OnDialogClickListener() {
+                    @Override
+                    public void onDeleteClick() {
+                        viewModel.cancelOrder(order.getId());
+                        for (OrderResponse item : Objects.requireNonNull(ORDER_LIST.getValue())) {
+                            if (item.getId().equals(order.getId())) {
+                                if (!Objects.equals(filterStatus, "All")) {
+                                    ORDER_LIST.getValue().remove(item);
+                                    break;
+                                } else {
+                                    item.getStatus()
+                                            .setStatus(Constants.ORDER_STATUS_CANCELED);
+                                    adapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
+                        }
+                        if (ORDER_LIST.getValue().isEmpty()) {
+                            IS_EMPTY.setValue(true);
+                        }
+                        if (!Objects.equals(filterStatus, "All")) {
+                            adapter.removeItem(position);
+                        }
+                    }
+                    @Override
+                    public void onCancelClick() {
+                    }
+                })
+                .show();
 
     }
+
+    @Override
+    public void onPaymentClick(OrderResponse order, int position) {
+        if (order.getPaymentMethod() == Constants.FISERV && order.getFiservInfo() != null
+                && order.getFiservInfo().getCheckout() != null) {
+
+            String url = order.getFiservInfo().getCheckout().getRedirectionUrl();
+            if (url != null && !url.isEmpty()) {
+                Intent intent = new Intent(this, PaymentRedirectActivity.class);
+                intent.putExtra("paymentUrl", url);
+                intent.putExtra("orderId", order.getId());
+                positionPayment = position;
+                paymentLauncher.launch(intent);  // Dùng ActivityResultLauncher
+            }
+        }
+    }
+
 
     public void getListProduct(String categoryId, Integer page) {
         viewModel.getListProducts(new MainCalback<ResponseListObj<ProductResponse>>() {
@@ -273,6 +367,30 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
                 PRODUCT_LIST.setValue(currentList);
             }
         }, categoryId, page);
+    }
+    public void getProductDetail(String id) {
+        viewModel.getProductDetail(new MainCalback<ProductResponse>() {
+            @Override
+            public void doError(Throwable error) {
+
+            }
+
+            @Override
+            public void doSuccess() {
+
+            }
+
+            @Override
+            public void doSuccess(ProductResponse object) {
+                ProductDetailActivity.PRODUCT_DETAIL = object;
+                Intent intent = new Intent(MyOrdersActivity.this, ProductDetailActivity.class);
+                startActivity(intent);
+            }
+            @Override
+            public void doFail() {
+
+            }
+        }, id);
     }
     @Override
     protected void onResume() {
@@ -297,7 +415,7 @@ public class MyOrdersActivity extends BaseActivity<ActivityMyOrdersBinding, MyOr
 
     @Override
     public void onItemClick(ProductResponse product) {
-
+        getProductDetail(product.getId());
     }
 
     @Override

@@ -178,6 +178,16 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/resend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:fontFamily="@font/roboto_500"
+                android:text="@string/resend_otp"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_13ssp" />
+
+            <TextView
                 android:id="@+id/errorMgs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package nix.cake.android.ui.main.cart.order;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -22,6 +23,7 @@ import nix.cake.android.constant.Constants;
 import nix.cake.android.data.model.api.ResponseListObj;
 import nix.cake.android.data.model.api.response.cart.CartItemResponse;
 import nix.cake.android.data.model.api.response.profile.address.AddressResponse;
+import nix.cake.android.data.model.api.response.profile.order.OrderResponse;
 import nix.cake.android.databinding.ActivityCreateOrderBinding;
 import nix.cake.android.di.component.ActivityComponent;
 import nix.cake.android.ui.base.activity.BaseActivity;
@@ -47,6 +49,7 @@ public class CreateOrderActivity extends BaseActivity<ActivityCreateOrderBinding
         setUpObserversItem();
         setUpAdapterItem();
         setUpShippingFee();
+        setUpPaymentMethod();
     }
 
     public void setUpShippingFee() {
@@ -90,6 +93,19 @@ public class CreateOrderActivity extends BaseActivity<ActivityCreateOrderBinding
             viewModel.shipping_fee.setValue(viewModel.fast_fee.getValue());
             viewBinding.ivStandard.setImageResource(R.drawable.unchecked);
             viewBinding.ivFast.setImageResource(R.drawable.checked);
+        });
+    }
+
+    public void setUpPaymentMethod() {
+        viewBinding.cod.setOnClickListener(v -> {
+            viewModel.paymentMethod.setValue(Constants.COD);
+            viewBinding.codImg.setImageResource(R.drawable.checked);
+            viewBinding.fiservImg.setImageResource(R.drawable.unchecked);
+        });
+        viewBinding.fiserv.setOnClickListener(v -> {
+            viewModel.paymentMethod.setValue(Constants.FISERV);
+            viewBinding.codImg.setImageResource(R.drawable.unchecked);
+            viewBinding.fiservImg.setImageResource(R.drawable.checked);
         });
     }
     public void setUpObserversItem() {
@@ -216,16 +232,72 @@ public class CreateOrderActivity extends BaseActivity<ActivityCreateOrderBinding
             viewModel.buyNowOrderRequest.setAddressId(addressSelected.getId());
             viewModel.buyNowOrderRequest.setShippingFee(Objects.requireNonNull(viewModel.shipping_fee.getValue()).intValue());
             viewModel.buyNowOrderRequest.setNote("Note");
-            viewModel.buyNowOrderRequest.setPaymentMethod(1);
-            viewModel.buyNowOrder(viewModel.buyNowOrderRequest);
+            viewModel.buyNowOrderRequest.setPaymentMethod(viewModel.paymentMethod.getValue());
+
+            viewModel.buyNowOrder(new MainCalback<OrderResponse>() {
+                @Override
+                public void doError(Throwable error) { }
+
+                @Override
+                public void doSuccess() { }
+
+                @Override
+                public void doSuccess(OrderResponse object) {
+                    if (object.getPaymentMethod() == Constants.FISERV && object.getFiservInfo() != null
+                            && object.getFiservInfo().getCheckout() != null) {
+                        String url = object.getFiservInfo().getCheckout().getRedirectionUrl();
+                        if (url != null && !url.isEmpty()) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(browserIntent);
+                            finish();
+                            return;
+                        }
+                    }
+
+                    Intent it = new Intent(CreateOrderActivity.this, OrderSuccessActivity.class);
+                    startActivity(it);
+                }
+
+                @Override
+                public void doFail() { }
+            }, viewModel.buyNowOrderRequest);
+
         } else {
             viewModel.createOrderRequest.setAddressId(addressSelected.getId());
             viewModel.createOrderRequest.setShippingFee(Objects.requireNonNull(viewModel.shipping_fee.getValue()).intValue());
             viewModel.createOrderRequest.setNote("Note");
-            viewModel.createOrderRequest.setPaymentMethod(1);
-            viewModel.createOrder(viewModel.createOrderRequest);
+            viewModel.createOrderRequest.setPaymentMethod(viewModel.paymentMethod.getValue());
+
+            viewModel.createOrder(new MainCalback<OrderResponse>() {
+                @Override
+                public void doError(Throwable error) { }
+
+                @Override
+                public void doSuccess() { }
+
+                @Override
+                public void doSuccess(OrderResponse object) {
+                    if (object.getPaymentMethod() == Constants.FISERV && object.getFiservInfo() != null
+                            && object.getFiservInfo().getCheckout() != null) {
+                        String url = object.getFiservInfo().getCheckout().getRedirectionUrl();
+                        if (url != null && !url.isEmpty()) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(browserIntent);
+                            finish();
+                            return;
+                        }
+                    }
+
+                    Intent it = new Intent(CreateOrderActivity.this, OrderSuccessActivity.class);
+                    startActivity(it);
+                }
+
+                @Override
+                public void doFail() { }
+            }, viewModel.createOrderRequest);
         }
     }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_create_order;

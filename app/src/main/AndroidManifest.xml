@@ -46,22 +46,35 @@
         android:hardwareAccelerated="true"
         android:windowSoftInputMode="adjustResize|stateHidden">
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAbgWMc4w9mE1C5nEVpLaM6ZUgV7qyvV0s" />
-        <activity android:name="nix.cake.android.ui.main.MainActivity"
 
-            android:windowSoftInputMode="adjustResize"
-            android:launchMode="singleTop" >
+        <activity
+            android:name="nix.cake.android.ui.main.splash.SplashActivity"
+            android:theme="@style/SplashTheme"
+            android:exported="true">
             <intent-filter>
-                <!--Config app launcher-->
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="nix.cake.android.ui.main.login.LoginActivity"/>
-        <activity android:name="nix.cake.android.ui.main.login.SignUpActivity"/>
+
+
+        <activity android:name=".ui.main.MainActivity"/>
+<!--        -->
+<!--        <activity android:name="nix.cake.android.ui.main.MainActivity"-->
+
+<!--            android:windowSoftInputMode="adjustResize"-->
+<!--            android:launchMode="singleTop" >-->
+<!--            <intent-filter>-->
+<!--                &lt;!&ndash;Config app launcher&ndash;&gt;-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+        <activity android:name="nix.cake.android.ui.main.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name="nix.cake.android.ui.main.login.SignUpActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name="nix.cake.android.ui.main.profile.order.MyOrdersActivity"/>
         <activity android:name="nix.cake.android.ui.main.profile.order.detail.OrderDetailActivity"/>
         <activity android:name="nix.cake.android.ui.main.profile.address.ShippingAddressActivity"/>
@@ -70,10 +83,36 @@
         <activity android:name="nix.cake.android.ui.main.product.filter.FilterProductActivity"/>
         <activity android:name="nix.cake.android.ui.main.product.detail.ProductDetailActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name="nix.cake.android.ui.main.login.VerifyOtpActivity"/>
+        <activity android:name="nix.cake.android.ui.main.login.VerifyOtpActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name="nix.cake.android.ui.main.product.find.FindProductActivity"/>
-        <activity android:name="nix.cake.android.ui.main.cart.order.CreateOrderActivity"/>
-        <activity android:name="nix.cake.android.ui.main.cart.order.OrderSuccessActivity"/>
+        <activity android:name=".ui.main.cart.order.CreateOrderActivity"/>
+        <activity
+            android:name=".ui.main.cart.order.OrderSuccessActivity"
+            android:exported="true">
+
+            <!-- SUCCESS redirect -->
+            <intent-filter android:label="fiserv_redirect">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="myapp"
+                    android:host="payment-result"
+                    android:pathPrefix="/success" />
+            </intent-filter>
+
+            <!-- FAIL redirect -->
+            <intent-filter android:label="fiserv_redirect_fail">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="myapp"
+                    android:host="payment-result"
+                    android:pathPrefix="/fail" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.main.profile.order.PaymentRedirectActivity" android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

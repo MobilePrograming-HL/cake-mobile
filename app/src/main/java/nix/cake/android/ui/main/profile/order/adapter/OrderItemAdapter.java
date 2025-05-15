@@ -25,7 +25,9 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
 
     public interface OnItemClickListener {
         void onItemClick(OrderResponse order);
-        void onCancelClick(OrderItemResponse order);
+        void onCancelClick(OrderResponse order, int position);
+        void onPaymentClick(OrderResponse order, int position);
+
     }
     public OrderItemAdapter() {
         this.data = new ArrayList<>();
@@ -54,11 +56,40 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         OrderResponse order = data.get(position);
         holder.binding.setTotal(DisplayUtils.convertDoubleTwoDecimalsHasCurrency(order.getTotalAmount()));
         holder.binding.statusOrder.setText(order.getStatus().getOrderStatus(order.getStatus().getStatus()));
+        holder.binding.orderCode.setText("# " + order.getCode());
+        holder.binding.orderTime.setText(DisplayUtils.formatIsoToLocal(order.getCreatedAt()));
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClick(order);
             }
         });
+        if (order.getStatus().getStatus() == 1 || order.getStatus().getStatus() == 2) {
+            holder.binding.cancel.setVisibility(View.VISIBLE);
+            holder.binding.cancel.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onCancelClick(order, position);
+                }
+            });
+        } else {
+            holder.binding.cancel.setVisibility(View.GONE);
+        }
+
+        if (order.getStatus().getStatus() == 1) {
+            holder.binding.payment.setVisibility(View.VISIBLE);
+            holder.binding.payment.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onPaymentClick(order, position);
+                }
+            });
+        } else {
+            holder.binding.payment.setVisibility(View.GONE);
+        }
+
+        if (order.getStatus().getStatus() == 3) {
+            holder.binding.received.setVisibility(View.VISIBLE);
+        } else {
+            holder.binding.received.setVisibility(View.GONE);
+        }
         if (order.getOrderItems().size() <= 1) {
             holder.binding.more.setVisibility(View.GONE);
             ItemOrderItemAdapter childAdapter = new ItemOrderItemAdapter(order.getOrderItems());
@@ -90,6 +121,13 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         this.data.clear();
         this.data.addAll(orders);
         notifyDataSetChanged();
+    }
+
+    public void removeItem(int position) {
+        if (position >= 0 && position < data.size()) {
+            data.remove(position);
+            notifyItemRemoved(position);
+        }
     }
     public static class OrderItemViewHolder extends RecyclerView.ViewHolder {
         ItemOrderBinding binding;

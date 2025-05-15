@@ -54,12 +54,6 @@ public class AddressProvinceAdapter extends RecyclerView.Adapter<AddressProvince
     public void onBindViewHolder(@NonNull AddressProvinceItemViewHolder holder, int position) {
         NationResponse nationResponse = data.get(position);
         holder.binding.name.setText(nationResponse.getName());
-//        holder.binding.name.setTypeface(
-//                Typeface.defaultFromStyle(position == selectedPosition ? Typeface.BOLD : Typeface.NORMAL)
-//        );
-//        holder.binding.ticked.setVisibility(
-//                position == selectedPosition ? View.VISIBLE : View.INVISIBLE
-//        );
         updateDefaultUI(holder, nationResponse);
 
         holder.itemView.setOnClickListener(v -> {
@@ -75,17 +69,6 @@ public class AddressProvinceAdapter extends RecyclerView.Adapter<AddressProvince
 
             }
         });
-//        holder.itemView.setOnClickListener(v -> {
-//            int previousSelected = selectedPosition;
-//            selectedPosition = holder.getAdapterPosition();
-//            if (previousSelected != -1) {
-//                notifyItemChanged(previousSelected);
-//            }
-//            notifyItemChanged(selectedPosition);
-//            if (listener != null) {
-//                listener.onItemClick(nationResponse);
-//            }
-//        });
     }
     private void updateDefaultUI(AddressProvinceItemViewHolder holder, NationResponse nation) {
         if (nation.isSelected()) {

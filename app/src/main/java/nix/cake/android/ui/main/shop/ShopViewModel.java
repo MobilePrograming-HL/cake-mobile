@@ -11,7 +11,6 @@ import nix.cake.android.data.model.api.response.product.ProductResponse;
 import nix.cake.android.ui.base.fragment.BaseFragmentViewModel;
 
 public class ShopViewModel extends BaseFragmentViewModel {
-    MutableLiveData<List<CategoryResponse>> categoriesList = new MutableLiveData<>();
     MutableLiveData<List<ProductResponse>> productList = new MutableLiveData<>();
 
     public ShopViewModel(Repository repository, MVVMApplication application) {

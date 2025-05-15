@@ -53,4 +53,16 @@ public class VerifyOtpViewModel extends BaseViewModel {
                             }
                         }));
     }
+
+    public void resendOtp(String email) {
+        compositeDisposable.add(repository.getApiService().resendOtp(email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                        }, throwable -> {
+                            hideLoading();
+                            Timber.e(throwable);
+                        }));
+    }
 }

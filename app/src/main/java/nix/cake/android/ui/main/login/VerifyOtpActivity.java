@@ -11,6 +11,7 @@ import nix.cake.android.databinding.ActivityVerifyOtpBinding;
 import nix.cake.android.di.component.ActivityComponent;
 import nix.cake.android.ui.base.activity.BaseActivity;
 
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -18,7 +19,11 @@ import android.widget.EditText;
 
 public class VerifyOtpActivity extends BaseActivity<ActivityVerifyOtpBinding, VerifyOtpViewModel> {
     public static String EMAIL;
+    private int resendAttempts = 0;
+    private final int maxResendAttempts = 3;
+    private final long resendIntervalMillis = 60_000;
 
+    private CountDownTimer countDownTimer;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +32,37 @@ public class VerifyOtpActivity extends BaseActivity<ActivityVerifyOtpBinding, Ve
         viewModel.email = EMAIL;
         viewBinding.email.setText(viewModel.email);
         setupOtpInputs();
+        startResendCountdown();
+        viewBinding.resend.setOnClickListener(v -> {
+            if (resendAttempts < maxResendAttempts) {
+                viewModel.resendOtp(EMAIL);
+                startResendCountdown();
+            }
+        });
+
+    }
+    private void startResendCountdown() {
+        viewBinding.resend.setEnabled(false);
+        resendAttempts++;
+
+        countDownTimer = new CountDownTimer(resendIntervalMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long seconds = millisUntilFinished / 1000;
+                viewBinding.resend.setText("Resend OTP (" + seconds + "s)");
+            }
+
+            @Override
+            public void onFinish() {
+                if (resendAttempts < maxResendAttempts) {
+                    viewBinding.resend.setText("Resend OTP");
+                    viewBinding.resend.setEnabled(true);
+                } else {
+                    viewBinding.resend.setText("Resend limit reached");
+                    viewBinding.resend.setEnabled(false);
+                }
+            }
+        }.start();
     }
 
     private void setupOtpInputs() {
@@ -134,9 +170,13 @@ public class VerifyOtpActivity extends BaseActivity<ActivityVerifyOtpBinding, Ve
         }
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
 
     @Override
     public int getLayoutId() {
