@@ -58,11 +58,11 @@ public class FindProductActivity extends BaseActivity<ActivityFindProductBinding
             if (Objects.equals(SORT.getValue(), "asc")) {
                 SORT.postValue("desc");
                 viewBinding.tvSort.setText(getString(R.string.price_highest_to_lowest));
-                getSortProduct(CATE_ID.getValue(), viewBinding.search.getText().toString(), viewModel.startPrice.getValue(), viewModel.endPrice.getValue(), "desc");
+                getSortProduct(CATE_ID.getValue(), SEARCH_KEY.getValue(), viewModel.startPrice.getValue(), viewModel.endPrice.getValue(), "desc");
             } else {
                 SORT.postValue("asc");
                 viewBinding.tvSort.setText(getString(R.string.price_lowest_to_highest));
-                getSortProduct(CATE_ID.getValue(), viewBinding.search.getText().toString(), viewModel.startPrice.getValue(), viewModel.endPrice.getValue(), "asc");
+                getSortProduct(CATE_ID.getValue(), SEARCH_KEY.getValue(), viewModel.startPrice.getValue(), viewModel.endPrice.getValue(), "asc");
             }
         });
     }
@@ -164,7 +164,7 @@ public class FindProductActivity extends BaseActivity<ActivityFindProductBinding
     public void onSearchClick() {
         viewModel.isSearch.set(false);
         SEARCH_KEY.postValue(viewBinding.search.getText().toString());
-        getSearchProduct(null, viewBinding.search.getText().toString(), Constants.ASC);
+        getSearchProduct(null, SEARCH_KEY.getValue(), Constants.ASC);
         hideKeyboard();
     }
 
@@ -172,7 +172,7 @@ public class FindProductActivity extends BaseActivity<ActivityFindProductBinding
         closeRightMenu();
         viewModel.isSearch.set(false);
         SEARCH_KEY.postValue(viewBinding.search.getText().toString());
-        getFilterProduct(CATE_ID.getValue(), viewBinding.search.getText().toString(), viewModel.startPrice.getValue(), viewModel.endPrice.getValue(), "asc");
+        getFilterProduct(CATE_ID.getValue(), SEARCH_KEY.getValue(), viewModel.startPrice.getValue(), viewModel.endPrice.getValue(), "asc");
         hideKeyboard();
     }
     public void getSearchProduct(String categoryId, String name, String sort) {

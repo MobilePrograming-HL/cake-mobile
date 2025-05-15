@@ -256,6 +256,7 @@ public class CreateOrderActivity extends BaseActivity<ActivityCreateOrderBinding
 
                     Intent it = new Intent(CreateOrderActivity.this, OrderSuccessActivity.class);
                     startActivity(it);
+                    finish();
                 }
 
                 @Override
@@ -290,6 +291,7 @@ public class CreateOrderActivity extends BaseActivity<ActivityCreateOrderBinding
 
                     Intent it = new Intent(CreateOrderActivity.this, OrderSuccessActivity.class);
                     startActivity(it);
+                    finish();
                 }
 
                 @Override
